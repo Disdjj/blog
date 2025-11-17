@@ -4,9 +4,7 @@ slug: 315-storm-z9uy3q
 url: /post/315-storm-z9uy3q.html
 date: '2024-03-15 23:10:35+08:00'
 lastmod: '2025-11-17 23:04:32+08:00'
-tags:
-  - '360'
-  - '315'
+tags: ["工作", "思考", "315"]
 keywords: 360,315
 toc: true
 isCJKLanguage: true

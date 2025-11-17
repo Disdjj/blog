@@ -7,6 +7,7 @@ date: '2024-03-14 23:40:12+08:00'
 lastmod: '2025-11-17 22:33:19+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["雪花算法", "分布式ID", "时钟回拨", "Go"]
 ---
 
 

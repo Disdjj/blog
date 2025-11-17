@@ -6,6 +6,7 @@ date: '2024-09-13 14:34:12+08:00'
 lastmod: '2025-11-17 23:00:27+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Prompt", "Code-Prompt", "链式调用", "LLM"]
 ---
 
 

@@ -6,6 +6,7 @@ date: '2024-11-26 23:01:25+08:00'
 lastmod: '2025-11-17 23:02:02+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Claude", "MCP", "AI", "思考"]
 ---
 
 

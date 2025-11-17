@@ -6,6 +6,7 @@ date: '2024-03-15 20:59:43+08:00'
 lastmod: '2025-11-17 22:56:19+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["etcd", "Go", "分布式", "入门"]
 ---
 
 

@@ -6,6 +6,7 @@ date: '2024-10-05 19:20:15+08:00'
 lastmod: '2025-11-17 23:01:01+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["ChatBot", "LLM", "Prompt", "角色生成", "AI"]
 ---
 
 

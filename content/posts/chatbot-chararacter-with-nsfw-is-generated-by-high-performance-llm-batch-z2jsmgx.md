@@ -8,6 +8,7 @@ date: '2024-10-06 18:24:32+08:00'
 lastmod: '2025-11-17 23:01:06+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["ChatBot", "LLM", "Prompt", "NSFW", "越狱"]
 ---
 
 

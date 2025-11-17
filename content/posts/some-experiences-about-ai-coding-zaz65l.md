@@ -6,6 +6,7 @@ date: '2025-11-02 21:56:06+08:00'
 lastmod: '2025-11-17 22:35:37+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 ---
 
 
