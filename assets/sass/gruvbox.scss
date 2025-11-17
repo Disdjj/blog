@@ -1,0 +1,74 @@
+/* 黑白配色 - 覆盖 gruvbox */
+:root {
+  /* 浅色模式背景 */
+  --bg_h: #ffffff;
+  --bg: #ffffff;
+  --bg_s: #f5f5f5;
+  --bg1: #eeeeee;
+  --bg2: #dddddd;
+  --bg3: #cccccc;
+  --bg4: #aaaaaa;
+
+  /* 浅色模式前景 */
+  --fg: #000000;
+  --fg1: #222222;
+  --fg2: #444444;
+  --fg3: #666666;
+  --fg4: #888888;
+
+  /* 所有颜色都设为黑色 */
+  --red: #000000;
+  --green: #000000;
+  --yellow: #000000;
+  --blue: #000000;
+  --purple: #000000;
+  --aqua: #000000;
+  --orange: #000000;
+  --gray: #666666;
+
+  --red-dim: #000000;
+  --green-dim: #000000;
+  --yellow-dim: #000000;
+  --blue-dim: #000000;
+  --purple-dim: #000000;
+  --aqua-dim: #000000;
+  --orange-dim: #000000;
+  --gray-dim: #666666;
+}
+
+.darkmode {
+  /* 暗色模式背景 */
+  --bg_h: #000000;
+  --bg: #000000;
+  --bg_s: #0a0a0a;
+  --bg1: #111111;
+  --bg2: #222222;
+  --bg3: #333333;
+  --bg4: #555555;
+
+  /* 暗色模式前景 */
+  --fg: #ffffff;
+  --fg1: #dddddd;
+  --fg2: #bbbbbb;
+  --fg3: #999999;
+  --fg4: #777777;
+
+  /* 所有颜色都设为白色 */
+  --red: #ffffff;
+  --green: #ffffff;
+  --yellow: #ffffff;
+  --blue: #ffffff;
+  --purple: #ffffff;
+  --aqua: #ffffff;
+  --gray: #999999;
+  --orange: #ffffff;
+
+  --red-dim: #ffffff;
+  --green-dim: #ffffff;
+  --yellow-dim: #ffffff;
+  --blue-dim: #ffffff;
+  --purple-dim: #ffffff;
+  --aqua-dim: #ffffff;
+  --gray-dim: #999999;
+  --orange-dim: #ffffff;
+}

@@ -6,6 +6,7 @@ date: '2024-09-13 14:24:59+08:00'
 lastmod: '2025-11-17 23:00:02+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "Prompt", "讽刺", "创造力"]
 ---
 
 

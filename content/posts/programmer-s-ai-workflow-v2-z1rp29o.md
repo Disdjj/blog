@@ -6,6 +6,7 @@ date: '2024-10-21 11:25:46+08:00'
 lastmod: '2025-11-17 23:04:43+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "工作流", "编程", "Cursor"]
 ---
 
 

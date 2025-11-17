@@ -6,6 +6,7 @@ date: '2024-05-30 01:31:35+08:00'
 lastmod: '2025-11-17 22:58:10+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Go", "闭包", "编程技巧"]
 ---
 
 

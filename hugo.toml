@@ -1,44 +1,104 @@
 baseURL = 'https://blog.pdjjq.org/'
 languageCode = 'zh-cn'
 title = 'DJJ'
-theme = 'hugo-xmin'
+theme = 'hugo-texify3'
 
 # 启用表情符号
 enableEmoji = true
 # 启用 robots.txt
 enableRobotsTXT = true
+# 启用 CJK 语言支持
+hasCJKLanguage = true
+# RSS 限制
+rssLimit = 20
+
+[pagination]
+pagerSize = 30
+
+[taxonomies]
+tags = "tags"
+categories = "categories"
 
 [params]
-  description = "反抗吧，朋友！"
-  footer = "&copy; DJJ {Year} | [GitHub](https://github.com/Disdjj) | [RSS](/index.xml)"
+title = "DJJ"
+author = "DJJ"
+description = "反抗吧，朋友！"
+footnote = """
+&copy; DJJ | <a class=link href=https://github.com/Disdjj target=_blank rel=noopener>GitHub</a> |
+<a class=link href=/index.xml target=_blank rel=noopener>RSS</a>
+"""
+
+# 日期格式
+dateFormat = "2006-01-02"
+
+# 启用目录
+toc = true
+
+# 根字体大小
+rootFontSize = "100%"
+
+# 启用数学公式
+math = false
+
+# 启用 DuckDuckGo 搜索框
+enableDuckDuckGoSearchBox = false
+
+# 自动编号副标题
+numberedSubtitles = false
+
+# 用点强调
+emphasisWithDots = false
+
+# 自定义 CSS 和 JS
+customCSS = ["/css/custom.css"]
+customJS = []
+
+# 禁用评论引擎
+[params.commentEngine]
+code = ""
+
+# 禁用捐赠按钮
+[params.buymeacoffee]
+code = ""
+
+# 禁用分享按钮
+[params.sharingbuttons]
+facebook = false
+twitter = false
+email = false
+linkedin = false
+reddit = false
+whatsapp = false
+hackernews = false
+telegram = false
 
 # 菜单配置
 [menu]
   [[menu.main]]
-    name = "首页"
+    name = "文章"
     url = "/"
     weight = 1
 
   [[menu.main]]
-    name = "文章"
-    url = "/posts/"
+    name = "标签"
+    url = "/tags/"
     weight = 2
 
   [[menu.main]]
-    name = "标签"
-    url = "/tags/"
+    name = "RSS"
+    url = "/index.xml"
     weight = 3
 
   [[menu.main]]
-    name = "订阅"
-    url = "/index.xml"
+    name = "关于"
+    url = "/about/"
     weight = 4
 
 # Markdown 渲染配置
 [markup]
   [markup.highlight]
     codeFences = true
-    style = 'monokailight'
+    style = 'gruvbox'
 
   [markup.goldmark.renderer]
     unsafe = true

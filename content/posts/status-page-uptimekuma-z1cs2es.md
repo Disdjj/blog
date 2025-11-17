@@ -6,6 +6,7 @@ date: '2024-10-30 11:00:23+08:00'
 lastmod: '2025-11-17 23:01:48+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["UptimeKuma", "StatusPage", "开源", "监控"]
 ---
 
 

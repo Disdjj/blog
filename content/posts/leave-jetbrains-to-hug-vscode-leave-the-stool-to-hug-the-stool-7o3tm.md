@@ -7,6 +7,7 @@ date: '2024-12-22 19:23:45+08:00'
 lastmod: '2025-11-17 23:02:19+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["IDE", "VSCode", "JetBrains", "AI编程"]
 ---
 
 

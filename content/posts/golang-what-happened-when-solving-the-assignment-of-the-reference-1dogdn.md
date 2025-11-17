@@ -7,6 +7,7 @@ date: '2024-07-05 14:35:14+08:00'
 lastmod: '2025-11-17 22:58:51+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Go", "指针", "汇编", "性能"]
 ---
 
 

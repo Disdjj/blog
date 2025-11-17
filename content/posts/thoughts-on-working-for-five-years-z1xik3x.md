@@ -6,6 +6,7 @@ date: '2025-07-19 14:46:03+08:00'
 lastmod: '2025-11-17 23:05:50+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["思考", "职业", "个人成长", "AI"]
 ---
 
 

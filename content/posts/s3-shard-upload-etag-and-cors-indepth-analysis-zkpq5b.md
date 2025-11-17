@@ -6,6 +6,7 @@ date: '2025-07-08 18:22:42+08:00'
 lastmod: '2025-11-17 23:04:37+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["S3", "分片上传", "ETag", "CORS", "后端"]
 ---
 
 

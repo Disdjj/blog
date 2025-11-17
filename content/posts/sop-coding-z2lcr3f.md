@@ -6,6 +6,7 @@ date: '2025-08-02 00:38:00+08:00'
 lastmod: '2025-11-17 23:05:30+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "编程", "SOP", "Prompt"]
 ---
 
 

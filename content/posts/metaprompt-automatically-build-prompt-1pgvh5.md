@@ -6,6 +6,7 @@ date: '2024-09-06 11:52:42+08:00'
 lastmod: '2025-11-17 22:59:50+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Prompt", "MetaPrompt", "LLM", "AI"]
 ---
 
 

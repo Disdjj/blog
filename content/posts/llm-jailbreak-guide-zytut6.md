@@ -6,6 +6,7 @@ date: '2024-10-16 23:30:31+08:00'
 lastmod: '2025-11-17 23:01:15+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["LLM", "Prompt", "越狱", "安全"]
 ---
 
 

@@ -6,6 +6,7 @@ date: '2024-10-20 20:51:18+08:00'
 lastmod: '2025-11-17 23:01:23+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["算法", "EMA", "数据分析"]
 ---
 
 

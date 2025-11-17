@@ -6,6 +6,7 @@ date: '2024-09-05 19:14:15+08:00'
 lastmod: '2025-11-17 22:59:45+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Prompt", "LLM", "Mermaid", "思维导图"]
 ---
 
 

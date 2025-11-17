@@ -8,6 +8,7 @@ date: '2025-07-21 22:58:27+08:00'
 lastmod: '2025-11-17 23:05:11+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "Agent", "上下文工程", "Manus", "Gemini"]
 ---
 
 

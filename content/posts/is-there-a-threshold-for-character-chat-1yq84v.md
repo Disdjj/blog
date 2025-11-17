@@ -6,6 +6,7 @@ date: '2024-07-24 21:45:24+08:00'
 lastmod: '2025-11-17 22:59:10+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "CharacterAI", "产品分析", "LLM"]
 ---
 
 

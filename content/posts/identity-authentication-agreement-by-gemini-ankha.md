@@ -6,6 +6,7 @@ date: '2025-06-30 17:00:58+08:00'
 lastmod: '2025-11-17 23:04:10+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["认证", "授权", "OIDC", "SAML", "Kerberos"]
 ---
 
 

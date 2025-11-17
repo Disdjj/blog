@@ -6,6 +6,7 @@ date: '2024-10-20 21:03:09+08:00'
 lastmod: '2025-11-17 23:01:19+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["BBR", "Kratos", "Go", "限流", "算法"]
 ---
 
 

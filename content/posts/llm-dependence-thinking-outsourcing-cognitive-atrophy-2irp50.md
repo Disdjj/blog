@@ -6,6 +6,7 @@ date: '2025-03-17 23:37:47+08:00'
 lastmod: '2025-11-17 23:02:58+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["LLM", "AI", "思考", "认知"]
 ---
 
 

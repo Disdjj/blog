@@ -6,6 +6,7 @@ date: '2024-04-18 00:19:29+08:00'
 lastmod: '2025-11-17 23:06:04+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["社会", "思考", "杂文"]
 ---
 
 

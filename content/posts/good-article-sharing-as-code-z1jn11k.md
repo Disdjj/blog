@@ -6,6 +6,7 @@ date: '2025-08-04 17:39:58+08:00'
 lastmod: '2025-11-17 23:05:42+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AsCode", "思考", "软件工程"]
 ---
 
 

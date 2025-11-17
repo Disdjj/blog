@@ -6,6 +6,7 @@ date: '2025-08-09 12:20:47+08:00'
 lastmod: '2025-11-17 23:05:55+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["GitHub", "CI/CD", "GitHubAction", "自动化"]
 ---
 
 

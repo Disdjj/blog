@@ -1,0 +1,36 @@
+/* 字体设置 */
+body, html {
+  font-family: "LXGW WenKai Mono TC", -apple-system, BlinkMacSystemFont, monospace !important;
+}
+
+code, pre, kbd, samp, .code {
+  font-family: "Google Sans Code", "LXGW WenKai Mono TC", monospace !important;
+}
+
+/* 移除捐赠按钮 */
+#bmc-wbtn {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* 文本选中样式 - 浅色模式 */
+::selection {
+  background-color: #4a90e2;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #4a90e2;
+  color: #ffffff;
+}
+
+/* 文本选中样式 - 暗色模式 */
+.darkmode ::selection {
+  background-color: #4a90e2;
+  color: #ffffff;
+}
+
+.darkmode ::-moz-selection {
+  background-color: #4a90e2;
+  color: #ffffff;
+}

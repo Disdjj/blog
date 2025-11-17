@@ -6,6 +6,7 @@ date: '2025-02-10 21:02:44+08:00'
 lastmod: '2025-11-17 23:02:43+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["LLM", "AI", "DeepSeek", "开源"]
 ---
 
 

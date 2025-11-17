@@ -6,6 +6,7 @@ date: '2024-03-24 02:09:34+08:00'
 lastmod: '2025-11-17 23:01:53+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Scoop", "Windows", "配置", "工具"]
 ---
 
 

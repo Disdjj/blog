@@ -6,6 +6,7 @@ date: '2025-04-21 23:08:56+08:00'
 lastmod: '2025-11-17 23:03:19+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["AI", "开源", "Codelf", "GitHub"]
 ---
 
 

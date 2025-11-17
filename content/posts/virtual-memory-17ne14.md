@@ -6,6 +6,7 @@ date: '2024-03-28 11:50:25+08:00'
 lastmod: '2025-11-17 22:57:26+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["操作系统", "虚拟内存", "MMU", "TLB"]
 ---
 
 

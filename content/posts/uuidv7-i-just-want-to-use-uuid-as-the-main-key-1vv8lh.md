@@ -6,6 +6,7 @@ date: '2024-09-02 16:41:56+08:00'
 lastmod: '2025-11-17 22:59:36+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["UUID", "数据库", "主键", "后端"]
 ---
 
 

@@ -6,6 +6,7 @@ date: '2025-06-07 00:55:23+08:00'
 lastmod: '2025-11-17 23:03:47+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["RAG", "Embedding", "Rerank", "LLM", "AI"]
 ---
 
 

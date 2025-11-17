@@ -6,6 +6,7 @@ date: '2024-08-12 18:16:56+08:00'
 lastmod: '2025-11-17 22:59:20+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["IDE", "JetBrains", "Fleet", "VSCode"]
 ---
 
 

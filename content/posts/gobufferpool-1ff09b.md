@@ -6,6 +6,7 @@ date: '2024-03-15 20:27:41+08:00'
 lastmod: '2025-11-17 22:56:14+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Go", "性能", "内存池", "源码"]
 ---
 
 

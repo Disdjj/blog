@@ -6,6 +6,7 @@ date: '2024-03-12 23:45:52+08:00'
 lastmod: '2025-11-17 22:56:39+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["分布式", "CAP", "理论", "后端"]
 ---
 
 

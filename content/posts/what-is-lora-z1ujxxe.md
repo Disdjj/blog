@@ -6,6 +6,7 @@ date: '2025-07-08 11:21:06+08:00'
 lastmod: '2025-11-17 23:04:28+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["LoRA", "LLM", "AI", "微调"]
 ---
 
 

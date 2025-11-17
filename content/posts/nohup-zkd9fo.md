@@ -6,6 +6,7 @@ date: '2024-03-20 14:46:55+08:00'
 lastmod: '2025-11-17 22:56:43+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Linux", "Shell", "nohup", "重定向"]
 ---
 
 

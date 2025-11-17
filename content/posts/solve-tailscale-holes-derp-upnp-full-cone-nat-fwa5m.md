@@ -6,6 +6,7 @@ date: '2025-07-13 05:04:28+08:00'
 lastmod: '2025-11-17 23:05:06+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Tailscale", "网络", "NAT", "UPnP", "Derp"]
 ---
 
 

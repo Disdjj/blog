@@ -6,6 +6,7 @@ date: '2024-03-23 00:18:32+08:00'
 lastmod: '2025-11-17 22:56:48+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Go", "embed", "编程"]
 ---
 
 

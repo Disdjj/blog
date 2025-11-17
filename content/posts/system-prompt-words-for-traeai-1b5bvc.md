@@ -6,6 +6,7 @@ date: '2025-02-18 22:53:57+08:00'
 lastmod: '2025-11-17 23:02:54+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Prompt", "LLM", "TraeAI", "SystemPrompt"]
 ---
 
 

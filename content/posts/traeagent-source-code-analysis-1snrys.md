@@ -6,6 +6,7 @@ date: '2025-07-07 11:01:30+08:00'
 lastmod: '2025-11-17 23:04:47+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["TraeAI", "Agent", "源码分析", "AI"]
 ---
 
 
