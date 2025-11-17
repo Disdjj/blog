@@ -8,6 +8,7 @@ date: '2024-03-13 00:07:25+08:00'
 lastmod: '2025-11-17 22:57:21+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["分布式锁", "etcd", "Redis", "后端"]
 ---
 
 

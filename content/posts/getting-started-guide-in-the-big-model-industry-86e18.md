@@ -6,6 +6,7 @@ date: '2024-10-23 11:20:08+08:00'
 lastmod: '2025-11-17 23:01:44+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["LLM", "AI", "入门", "指南", "资源"]
 ---
 
 

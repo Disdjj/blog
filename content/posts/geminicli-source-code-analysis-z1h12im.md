@@ -6,6 +6,7 @@ date: '2025-07-09 13:36:54+08:00'
 lastmod: '2025-11-17 23:05:02+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Gemini", "CLI", "源码分析", "AI", "Agent"]
 ---
 
 
