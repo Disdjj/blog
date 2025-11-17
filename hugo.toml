@@ -1,0 +1,107 @@
+baseURL = 'https://blog.pdjjq.org/'
+languageCode = 'zh-cn'
+title = 'DJJ'
+theme = 'PaperMod'
+
+# 启用表情符号
+enableEmoji = true
+# 启用 robots.txt
+enableRobotsTXT = true
+# 启用 Git 信息
+enableGitInfo = false
+
+# 分页配置
+[pagination]
+  pagerSize = 10
+
+[params]
+  # 副标题
+  description = "反抗吧,朋友!"
+
+  # 作者
+  author = "DJJ"
+
+  # 首页只显示文章列表，不显示欢迎信息
+  # 移除了 homeInfoParams 配置
+
+  # 首页文章列表简化配置
+  hideSummary = true
+  hideAuthor = true
+
+  # 显示阅读时间
+  ShowReadingTime = false
+  # 显示分享按钮
+  ShowShareButtons = true
+  # 显示文章导航
+  ShowPostNavLinks = true
+  # 显示面包屑导航
+  ShowBreadCrumbs = true
+  # 显示代码复制按钮
+  ShowCodeCopyButtons = true
+  # 显示目录
+  ShowToc = true
+  # 目录默认展开
+  TocOpen = false
+
+  # 日期格式
+  dateFormat = "2006-01-02"
+
+  # 社交图标配置
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/Disdjj"
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:shuaiqijianhao@qq.com"
+
+# 菜单配置
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "archives"
+    name = "归档"
+    url = "/archives/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "search"
+    name = "搜索"
+    url = "/search/"
+    weight = 40
+
+# Markdown 渲染配置
+[markup]
+  [markup.highlight]
+    # 代码高亮主题
+    style = 'monokai'
+    # 显示行号
+    lineNos = true
+    # 高亮行号背景
+    lineNumbersInTable = true
+
+  [markup.goldmark.renderer]
+    # 允许 HTML 标签
+    unsafe = true
+
+# 输出格式
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# 隐私配置
+[privacy]
+  [privacy.googleAnalytics]
+    disable = true
+  [privacy.disqus]
+    disable = true
