@@ -1,0 +1,164 @@
+/* --- 1. 基础优化 (滚动条 & 动画) --- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 极简滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* 页面淡入效果 */
+#wrapper {
+  animation: fadeIn 0.8s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 2. 首页标题 & 描述特效 (Visual Interest) --- */
+
+/* 标题：极简高级感 (Minimalist & Tech) */
+#header h1 a {
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: var(--fg) !important; /* 跟随主题文字颜色 */
+  text-decoration: none !important;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  transition: all 0.3s ease;
+  text-shadow: none;
+  position: relative;
+}
+
+/* 悬停特效：激活科技蓝 + 辉光 */
+#header h1 a:hover {
+  color: #4a90e2 !important;
+  text-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+  transform: translateY(-1px); /* 轻微上浮 */
+}
+
+/* 描述文字打字机光标效果 (模拟) */
+.site-description {
+  font-family: "Source Code Pro", monospace;
+  color: var(--fg2);
+  display: inline-block;
+  
+  /* JS 打字机样式基础 */
+  border-right: 3px solid #4a90e2; /* 光标 */
+  padding-right: 5px; /* 光标与文字的距离 */
+  
+  /* 仅保留光标闪烁动画 */
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* --- 3. 代码块：科技感突出风格 (Tech/Prominent) --- */
+
+pre {
+  background: #1e1e1e !important;
+  color: #d4d4d4;
+  border-radius: 8px;
+  border: 1px solid #333;
+  position: relative;
+  padding: 1.5em !important; /* 恢复正常的均匀内边距 */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  overflow: auto; /* 允许滚动 */
+}
+
+/* 修复复制按钮位置：Sticky 定位 */
+pre > button, 
+.copy-code-button, 
+.copy-btn,
+div.highlight > div > button { 
+  position: sticky !important;
+  top: 0;          
+  left: 100%;      
+  margin-left: -3em; 
+  float: right;
+  z-index: 20;
+  margin-top: 0; /* 不需要负边距了 */
+  margin-right: -0.5em; /* 微调靠右 */
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+pre > button:hover,
+.copy-code-button:hover {
+  opacity: 1;
+}
+
+/* 移除顶部伪装标题栏 (pre::before) */
+
+/* 左侧高亮条 (Tech Accent) - 保留但微调 */
+pre::after {
+  content: "";
+  position: absolute; 
+  top: 0; /* 顶天立地 */
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  background: #4a90e2;
+  z-index: 6;
+}
+
+/* 调整代码内容内边距 */
+.content pre code {
+  display: block;
+  padding: 0.5em 1em !important;
+  font-family: "Source Code Pro", monospace !important;
+  font-size: 0.9em;
+}
+
+/* 行内代码高亮 */
+.content p code, .content li code {
+  background: rgba(255, 51, 102, 0.1) !important;
+  color: #ff3366;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.darkmode .content p code, .darkmode .content li code {
+  background: rgba(255, 51, 102, 0.2) !important;
+  color: #ff6b6b;
+}
+
+/* --- 4. 链接与引用 (保留之前的优秀设计) --- */
+.content a {
+  color: #4a90e2;
+  text-decoration: none;
+  background-image: linear-gradient(to right, #4a90e2 0%, #4a90e2 100%);
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s;
+}
+.content a:hover {
+  background-size: 100% 2px;
+}
+
+blockquote {
+  background: transparent;
+  border-left: 4px solid #ff3366 !important; /* 换个醒目的颜色 */
+  padding: 1em;
+  color: #666;
+  font-style: italic;
+}
+.darkmode blockquote {
+  color: #999;
+}
