@@ -1,10 +1,27 @@
-/* 字体设置 */
-body, html {
-  font-family: "LXGW WenKai Mono TC", -apple-system, BlinkMacSystemFont, monospace !important;
+/* 引入 Source Code Pro 字体 */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap');
+
+/* 字体设置 - 普通文本使用主题原生的 Latin Modern Roman */
+body, html, #wrapper {
+  font-family: "Latin Modern Roman", Georgia, Cambria, "Times New Roman", Times, serif !important;
 }
 
+/* 确保内容区域也使用正确的字体 */
+.content, .content p, .content li, .content div {
+  font-family: "Latin Modern Roman", Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
+
+/* 代码字体使用 Source Code Pro */
 code, pre, kbd, samp, .code {
-  font-family: "Google Sans Code", "LXGW WenKai Mono TC", monospace !important;
+  font-family: "Source Code Pro", "Latin Modern Mono", monospace !important;
+}
+
+pre code {
+  font-family: "Source Code Pro", "Latin Modern Mono", monospace !important;
+}
+
+.content pre, .content code {
+  font-family: "Source Code Pro", "Latin Modern Mono", monospace !important;
 }
 
 /* 移除捐赠按钮 */
@@ -33,4 +50,46 @@ code, pre, kbd, samp, .code {
 .darkmode ::-moz-selection {
   background-color: #4a90e2;
   color: #ffffff;
+}
+
+/* 调整标题字体大小 */
+.content h1 {
+  font-size: 2.2rem !important;
+}
+
+.content h2 {
+  font-size: 1.8rem !important;
+}
+
+.content h3 {
+  font-size: 1.5rem !important;
+}
+
+.content h4 {
+  font-size: 1.3rem !important;
+}
+
+.content h5 {
+  font-size: 1.1rem !important;
+}
+
+.content h6 {
+  font-size: 1rem !important;
+}
+
+/* 调整暗色模式的背景和前景色 */
+.darkmode {
+  --bg_h: #1a1a1a !important;
+  --bg: #2a2a2a !important;
+  --bg_s: #333333 !important;
+  --bg1: #3d3d3d !important;
+  --bg2: #4a4a4a !important;
+  --bg3: #5a5a5a !important;
+  --bg4: #6a6a6a !important;
+
+  --fg: #e8e8e8 !important;
+  --fg1: #d4d4d4 !important;
+  --fg2: #c0c0c0 !important;
+  --fg3: #adadad !important;
+  --fg4: #9a9a9a !important;
 }
