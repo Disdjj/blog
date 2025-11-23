@@ -51,7 +51,7 @@ emphasisWithDots = false
 
 # 自定义 CSS 和 JS
 customCSS = ["/css/custom.css", "/css/cool-style.css"]
-customJS = ["/js/typewriter.js"]
+customJS = []
 
 # Giscus 评论引擎
 [params.commentEngine]
