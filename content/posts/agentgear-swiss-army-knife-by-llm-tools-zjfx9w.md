@@ -29,7 +29,7 @@ isCJKLanguage: true
 
 > [Repo](https://github.com/TokenRollAI/rs-agent-gear)
 >
-> [agent-gear在线文档](https://llmdoc-viewer.tokenroll.ai/TokenRollAI/rs-agent-gear)
+> [agent-gear在线文档](https://llmdoc.tokenroll.ai/TokenRollAI/rs-agent-gear)
 
 # 背景
 
