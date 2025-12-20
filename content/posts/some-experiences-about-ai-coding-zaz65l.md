@@ -6,12 +6,9 @@ date: '2025-11-02 21:56:06+08:00'
 lastmod: '2025-11-17 22:35:37+08:00'
 toc: true
 isCJKLanguage: true
-tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 ---
 
 
-
-# 一些关于AI Coding的经验
 
 > 在线查看: https://ai-coding-showcase.pdjjq.org/
 
@@ -20,9 +17,13 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 - "写代码"的门槛非常低, 收益非常的可观 [Anthropic是怎么使用Claude Code](https://www-cdn.anthropic.com/58284b19e702b49db9302d5b6f135ad8871e7658.pdf)
 - 写代码 != 产出高质量软件
 - 需求的实现成本/难度 **下降**?
-- 不要为LLM的发展焦虑, 但不要做 coding义和团
+- 不要为LLM的发展焦虑, 但不要做 coding义和团<sup>（指 本质正义, 工具落后, 顽固守旧的人）</sup>
 
 # 基座模型
+
+***至少到2025年年底, 我们应该认识到: 基础模型进步带来的收益时最大的***
+
+***在任何生产力场景下, 应该总是选择SOTA模型***
 
 ### 基本性能要求
 
@@ -37,7 +38,7 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 - 其他特性:
 
   - ToolUse / Function Call
-  - Token Cache
+  - Prompt Cache
   - Reasoning
 
 ### 主流的模型
@@ -52,23 +53,23 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 
 目前最强的Agent Model: 
 
-- [旗舰 Opus](https://www.anthropic.com/claude/opus)
-- ***[次旗舰 Sonnet](https://www.anthropic.com/news/claude-sonnet-4-5)***  ***: 主要使用的Coding模型, 全能的模型***
+- ***[旗舰 Opus](https://www.anthropic.com/claude/opus)***​ ***: 主要使用的Coding模型***
+- ***[次旗舰 Sonnet](https://www.anthropic.com/news/claude-sonnet-4-5)***: 在很长的一段时间内, sonnet都是一个全能的模型
 - [狗屎 Haiku](https://www.anthropic.com/news/claude-haiku-4-5)
 
 ##### OpenAI (CloseAI)
 
-***[gpt-5-codex](https://platform.openai.com/docs/models/gpt-5-codex)***  ***:  修改准确, 调查充分, 但是耗时过长, 非常适合修复BUG***
+***[gpt-5.2-codex](https://openai.com/zh-Hant/index/introducing-gpt-5-2-codex/)***  ***:  修改准确, 调查充分, 但是耗时过长, 非常适合修复BUG***
 
 ##### Gemini (Google大善人)
 
-> ***Gemini 3 : 虽然还没有公布发布时间, 但是我们几乎可以认为gemini 3 会平息2025最佳模型的争论***
+[Gemini 3.0 pro](https://aistudio.google.com/models/gemini-3): 史上最佳的对话模型
 
-***[Gemini 2.5 pro](https://deepmind.google/models/gemini/pro/)***  ***: 除了写代码之外最好的大模型, Product Planning / Chat 的最佳模型,***  ***[AI Studio](https://aistudio.google.com/)***​***几乎免费用***
+[Gemin 3.0 Flash](https://blog.google/products/gemini/gemini-3-flash/): 我们到现在都不知道Google是怎么做到的
 
 ##### Qwen (真正的OpenAI)
 
-[qwen3 Max](https://qwen.ai/blog?id=72071a922385147be2ca81cdfaa50035db6e85d0&from=research.research-list) : 中国特色gemini 2.5 pro
+[qwen3 Max](https://qwen.ai/blog?id=72071a922385147be2ca81cdfaa50035db6e85d0&from=research.research-list) : 中国特色gemini
 
 ***[qwen3 coder plus](https://qwenlm.github.io/blog/qwen3-coder/)***  ***: 狗都不用, 但是必要的时候可以当狗***
 
@@ -76,17 +77,15 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 
 ***[glm4.6](https://docs.z.ai/guides/llm/glm-4.6)***  ***: 能力很好,***  ***[Coding Plan](https://z.ai/subscribe)***​***也很好, 但是最近在降智***
 
-[Kimi K2](https://moonshotai.github.io/Kimi-K2/)
-
 [Minimax-M2](https://www.minimax.io/news/minimax-m2)
+
+[Kimi K2](https://moonshotai.github.io/Kimi-K2/)
 
 ##### **DeepSeek (我卡呢?)**
 
 > 大家举起双手把力量借给DeepSeek 👐👐👐
 
-[DeepSeek-V3.1-Terminus](https://api-docs.deepseek.com/zh-cn/news/news250922)
-
-[DeepSeek-V3.2-Exp](https://api-docs.deepseek.com/zh-cn/news/news250929)
+[DeepSeek-V3.2](https://api-docs.deepseek.com/zh-cn/news/news251201)
 
 # 主流的AI Coding工具
 
@@ -105,6 +104,7 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 大部分耳熟能详的AI IDE都是基于VsCode来做, 包括但不限于:
 
 - ***[Cursor](https://cursor.com/)***​ ***: 最流行的AI Coding工具, 开箱即用, 最好的complete功能, 定价变化大***
+- ***[Antigravity](https://antigravity.google/)***​ ***: Google出品, 目前提供的额度比较高, 原生连接Chrome, Agent pannel***
 - [Windsurf](https://windsurf.com/): 无功无过
 - [Trae](https://trae.ai/): 字节出品, 做的不错, 重新设计过UI, 有SOLO模式, 创新不大
 - [Qoder](https://qoder.com/): 阿里出品
@@ -112,7 +112,9 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 - 开源: [Void](https://voideditor.com/)(不再维护了)
 - 开源Coding插件: [Cline](https://cline.bot/) / [Roo Code](https://roocode.com/) / [Kilo Code](https://kilocode.ai/) / [continue.dev](https://www.continue.dev/)
 
-最大的优势是: 用户习惯迁移非常方便. 缺点是: 同质化非常严重
+最大的优势是: 用户习惯迁移非常方便
+
+缺点是: 同质化非常严重
 
 ### Auto Complete
 
@@ -139,8 +141,10 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 
 - ***[Cluade Code](https://www.claude.com/product/claude-code)***  ***: 目前最强大 特性最丰富 普适性最强的的Coding工具***
 - ***[Codex CLI](https://developers.openai.com/codex/cli/)***  ***: 功能非常简陋, 纯靠模型能力硬顶***
+- ***[OpenCode](https://opencode.ai/)***​ ***: 拥有目前最出色的Plugin设计, 我会逐渐的迁移到OpenCode***
+
 - ***[iflow](https://iflow.cn/)***​ ***: 国产CC***
-- [gemini cli](https://github.com/google-gemini/gemini-cli) : 做的也很简陋, 但是更新迭代快, 配合gemini2.5pro的1M上下文非常的爽!
+- [gemini cli](https://github.com/google-gemini/gemini-cli) : 做的也很简陋, 但是更新迭代速度比较快
 - [auggie](https://docs.augmentcode.com/cli/overview) / [cursor cli](https://cursor.com/cli): 狗屎
 
 ## Web/Remote Agnt
@@ -154,6 +158,8 @@ tags: ["AI", "编程", "工作流", "AIDE", "上下文工程"]
 [v0.dev](https://v0.dev/)
 
 [lovable](https://lovable.dev/?utm_feeditemid=&utm_device=c&utm_term=loveable&utm_source=google&utm_medium=ppc&utm_campaign=US+-+Search+-+Lovable+-+CORE&campaignid=23072209374&devicetype=c&gclid=CjwKCAiAwqHIBhAEEiwAx9cTeXrxCTihhEasA3K6V3Ol8z0L3FKJF7-ptX6gsrE8xNRMHFvZNXr8ThoCndwQAvD_BwE&creativeid=777017041384&gad_source=1&gad_campaignid=23072209374&gbraid=0AAAAA-iIxGdzRbJfuyfceh8ZUw2kAlW3F)
+
+[Google AI Studio](https://aistudio.google.com/apps)
 
 [bolt.new](https://bolt.new/)
 
@@ -278,11 +284,11 @@ LLM没有长期记忆, 全部依赖于Context, 文档系统本质上就是外挂
 
 - [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp): Browser use, 谷歌出品, 调用浏览器, 获取Console/网络请求 日志
 
+- ***[figma](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)***​ ***: 尽管我几乎不使用figma, 但是由于figma巨大的影响力, 还是加上, 防止有些人竟然不知道***
 - [K8S](https://github.com/containers/kubernetes-mcp-server): 注意要使用 [readonly模式](https://github.com/containers/kubernetes-mcp-server#:~:text=table)%20(default%20%22table%22)-,%2D%2Dread%2Donly,-If%20set%2C%20the)
 - [github](https://github.com/github/github-mcp-server): 和Github交互 (虽然我认为使用 [`gh`](https://cli.github.com/) cli + Bash Tool 是更好的解决方案)
-- [ref](https://ref.tools/): 提供准确的文档, Better than context7 贵的东西的缺点只有贵 :(
 - [context7](https://github.com/upstash/context7): 虽然我认为用处不大, 但是推荐尝试
-- ***[figma](https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Figma-MCP-server)***​ ***: 尽管我几乎不使用figma, 但是由于figma巨大的影响力, 还是加上, 防止有些人竟然不知道***
+- [ref](https://ref.tools/): 提供准确的文档, Better than context7 贵的东西的缺点只有贵 :(
 
 ##### 不要使用的MCP
 
@@ -390,7 +396,7 @@ MCP是灾难, 调休也是.
 
 - [Andrej Karpathy on X: "+1 for "context engineering" over "prompt engineering"](https://x.com/karpathy/status/1937902205765607626?ref=blog.langchain.com)
 - [Tobi Lutke tweet](https://x.com/tobi/status/1935533422589399127)
-- [Free ~14 minute talk on Context Engineering tips &amp; tricks](https://x.com/addyosmani/status/1966752236249202743)
+- [Free ~14 minute talk on Context Engineering tips & tricks](https://x.com/addyosmani/status/1966752236249202743)
 - [Windsurf: Windsurf’s context retrieval](https://x.com/_mohansolo/status/1899630246862966837?ref=blog.langchain.com)
 - [CodeRabbit: Context Engineering](https://x.com/ai_for_success/status/1966874686283018565)
 - [Context engineering, clearly explained!](https://x.com/akshay_pachaar/status/1970493414795079904)
@@ -398,3 +404,9 @@ MCP是灾难, 调休也是.
 - [How to build a context engineering workflow](https://x.com/_avichawla/status/1966228573414633743)
 - [Context Engineering for Agents - Lance Martin, LangChain](https://www.youtube.com/watch?v=_IlTcWciEC4)
 - [Context Engineering with DSPy - the fully hands-on Basics to Pro course](https://www.youtube.com/watch?v=5Bym0ffALaU)
+
+# 一些暴论
+
+1. ***Get Hands Dirty , 动手做比什么都重要***
+2. 想象力 &gt; 行动力 &gt; 编程能力<sup>（一切都建立在有软件工程的基本素质）</sup>
+3. 领域的融合, 狭窄深邃不再是无法克服的问题
