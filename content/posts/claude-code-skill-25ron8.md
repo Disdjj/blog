@@ -3,7 +3,7 @@ title: Claude Code SKill
 slug: claude-code-skill-25ron8
 url: /post/claude-code-skill-25ron8.html
 date: '2026-01-24 14:28:01+08:00'
-lastmod: '2026-01-24 17:45:47+08:00'
+lastmod: '2026-01-24 17:46:55+08:00'
 toc: true
 isCJKLanguage: true
 ---
@@ -310,6 +310,8 @@ run scripts/hello.sh
 ```
 
 ### subagent的 context
+
+[https://github.com/anthropics/claude-code/issues/20492](https://github.com/anthropics/claude-code/issues/20492)
 
 很遗憾, subagent 里并不是fork master context, 看起来就像是运行普通的 agnet 一样, 只是把 Skill 的执行放在了 subagent 中
 
