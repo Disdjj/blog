@@ -1,16 +1,16 @@
 ---
-title: Fuck Claude Code
+title: 一场外围的狂欢
 slug: fuck-claude-code-zilfwb
 url: /post/fuck-claude-code-zilfwb.html
 date: '2026-04-10 00:50:23+08:00'
-lastmod: '2026-04-10 01:46:12+08:00'
+lastmod: '2026-04-10 01:50:22+08:00'
 toc: true
 isCJKLanguage: true
 ---
 
 
 
-# Fuck Claude Code
+# 一场外围的狂欢
 
 Claude Code 的源码泄露了, 然后呢?
 
