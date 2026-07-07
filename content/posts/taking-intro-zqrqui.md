@@ -1,16 +1,16 @@
 ---
-title: Tager Intro
+title: 'Tager: Intro'
 slug: taking-intro-zqrqui
 url: /post/taking-intro-zqrqui.html
 date: '2026-07-07 15:00:30+08:00'
-lastmod: '2026-07-07 15:04:57+08:00'
+lastmod: '2026-07-07 15:37:40+08:00'
 toc: true
 isCJKLanguage: true
 ---
 
 
 
-# Tager Intro
+# Tager: Intro
 
 > Deep Dark ♂ AI Lesson
 
