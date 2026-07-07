@@ -3,7 +3,7 @@ title: 'Tager: 提示词攻击'
 slug: tager-prompt-word-attack-zl4i52
 url: /post/tager-prompt-word-attack-zl4i52.html
 date: '2026-07-07 14:35:21+08:00'
-lastmod: '2026-07-07 15:36:02+08:00'
+lastmod: '2026-07-07 15:36:51+08:00'
 toc: true
 isCJKLanguage: true
 ---
@@ -12,7 +12,7 @@ isCJKLanguage: true
 
 # Tager: 提示词攻击
 
-![](https://awaken-intelligence.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM1NTA4ZGVjNmRjMGU4MWQ0YTlkNDRmZWUyN2VkOGNfY0Y2QzQ0eUVZZ2NzYW9mRUJqblVVN3NkTjJQNDE3ZmdfVG9rZW46WnNZT2J3U1dib25zelB4TVBsN2NUVWVCblpmXzE3ODM0MDYxMTk6MTc4MzQwOTcxOV9WNA&add_watermark=true&scene_type=CCM)
+![image](/images/image-20260707153645-29bfi2h.png)
 
 ## 简单
 
