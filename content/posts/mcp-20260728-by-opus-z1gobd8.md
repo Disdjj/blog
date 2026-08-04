@@ -3,7 +3,7 @@ title: 'MCP: 2026-07-28 by Opus'
 slug: mcp-20260728-by-opus-z1gobd8
 url: /post/mcp-20260728-by-opus-z1gobd8.html
 date: '2026-08-04 14:08:56+08:00'
-lastmod: '2026-08-04 14:51:55+08:00'
+lastmod: '2026-08-04 15:04:58+08:00'
 toc: true
 isCJKLanguage: true
 ---
@@ -22,7 +22,7 @@ MCP 发布了最新的版本的: 2026-07-28
 
 # 先说结论
 
-这个版本最值得看的不是多了几个功能, 而是 MCP 终于把自己的身份讲清楚了: 它是一个**能力接入协议**, 不是 Agent Framework.
+这个版本最值得看的一点: MCP 终于把自己的身份讲清楚了. 它是一个**能力接入协议**, 到此为止.
 
 很长一段时间里, 大家把 MCP 理解成"让大模型调用工具的协议". 到 `2026-07-28` 这个理解已经不够用了.
 
@@ -85,7 +85,7 @@ server/discover
 
 Client 可以先调 `server/discover`​, 也可以直接发业务请求, 收到 `UnsupportedProtocolVersionError` 再挑个兼容版本重试.
 
-注意 Discovery 的重点不是拿工具列表, 而是:
+Discovery 的重点在哪? 不在工具列表. 它真正完成的是:
 
 ```text
 协议兼容性发现
@@ -211,7 +211,7 @@ prompts/get
 
 适合表达"分析当前项目架构"、"生成本周工作总结"、"Review 当前 PR"、"根据会议记录生成待办".
 
-Prompt 不只是个字符串, 它能组合多条消息、资源链接和 Server 管理的内容.
+Prompt 能组合多条消息、资源链接和 Server 管理的内容. 它比一个字符串重得多.
 
 和 Tool 的分工:
 
@@ -820,7 +820,7 @@ User ── UI / Agent ─────▶│ Tool Discovery      │
 
 # 总结
 
-MCP 的核心价值不只是统一 Tool Calling.
+MCP 的核心价值远超统一 Tool Calling.
 
 它定义的是五类边界:
 
