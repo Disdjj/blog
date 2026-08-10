@@ -1,0 +1,62 @@
+{{- /*
+  搜索索引：仅在首页输出为 /search-index.json
+  字段名压到单字符以控制体积（前端 assets/js/search.js 与此约定一一对应）：
+    u = url, t = title, d = date, g = tags, r = 阅读时长, s = 摘要, c = 正文纯文本
+  正文按 $limit 截断，避免个别超长文章把索引撑大。
+*/ -}}
+{{- $limit := 9000 -}}
+{{- $records := slice -}}
+{{- range where .Site.RegularPages "Type" "posts" -}}
+  {{- $title := .Title -}}
+
+  {{- /*
+    从渲染后的 HTML 剔除 <figcaption> 再取纯文本：render-image.html 会输出图片说明，
+    其中的 alt 多是 "image"、"PixPin_2026-01-26" 这类文件名，会污染摘要与命中片段。
+    直接用 .Plain 会把它们一并带进索引。
+
+    代码块保留：像 sync.Pool、WaitGroup、kubectl 这些标识符只在代码块里出现，
+    剔除后就完全搜不到了，对技术博客是实打实的检索能力缺失。
+  */ -}}
+  {{- $html := .Content -}}
+  {{- $html = replaceRE `(?s)<figcaption.*?</figcaption>` " " $html -}}
+  {{- /* render-heading.html 给每个标题加了 <a class="heading-anchor">#</a>，
+         plainify 后会在标题末尾留下孤立的 # */ -}}
+  {{- $html = replaceRE `(?s)<a class="heading-anchor".*?</a>` "" $html -}}
+  {{- $body := $html | plainify | htmlUnescape -}}
+  {{- $body = replaceRE `\s+` " " $body -}}
+  {{- $body = trim $body " " -}}
+
+  {{- /* 多数文章正文首行的 H1 与 front matter title 重复，去掉以免摘要与命中片段重复标题 */ -}}
+  {{- $body = trim (strings.TrimPrefix $title $body) " " -}}
+
+  {{- if gt (strings.RuneCount $body) $limit -}}
+    {{- $body = strings.Substr $body 0 $limit -}}
+  {{- end -}}
+
+  {{- /*
+    摘要优先取 front matter description（仅 8 篇有），否则截取正文开头。
+    截取用的文本额外剔掉代码块——正文里保留代码是为了可检索，但让摘要以代码开头
+    没有可读性。
+  */ -}}
+  {{- $summary := "" -}}
+  {{- with .Params.description -}}
+    {{- $summary = . -}}
+  {{- else -}}
+    {{- $prose := replaceRE `(?s)<pre.*?</pre>` " " $html -}}
+    {{- $prose = $prose | plainify | htmlUnescape -}}
+    {{- $prose = trim (replaceRE `\s+` " " $prose) " " -}}
+    {{- $prose = trim (strings.TrimPrefix $title $prose) " " -}}
+    {{- $summary = strings.Substr $prose 0 (math.Min 140 (strings.RuneCount $prose)) -}}
+  {{- end -}}
+
+  {{- $records = $records | append (dict
+      "u" .RelPermalink
+      "t" $title
+      "d" (.Date.Format "2006-01-02")
+      "g" (.Params.tags | default slice)
+      "r" .ReadingTime
+      "s" $summary
+      "c" $body
+  ) -}}
+{{- end -}}
+{{- dict "n" (len $records) "p" $records | jsonify -}}
