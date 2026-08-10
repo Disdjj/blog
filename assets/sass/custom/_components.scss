@@ -1,0 +1,427 @@
+/*
+ * 组件样式
+ *
+ * 收纳此前散落在模板内联 <style> 中的规则：
+ *   layouts/index.html 与 layouts/_default/list.html 各有一份分页样式（完全重复）
+ *   layouts/partials/header.html 有一份副标题样式
+ */
+
+@use "tokens" as *;
+
+/* ---------- 页头 ---------- */
+
+.site-description {
+  margin: -0.5rem 0 1rem;
+  color: var(--fg2);
+  font-size: 0.9rem;
+}
+
+// 标题悬停加强调色辉光
+#header h1 a {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  transition: color var(--speed), transform var(--speed);
+
+  &:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+}
+
+// 头部按钮：搜索在左上角，明暗切换在右上角
+#header {
+  position: relative;
+}
+
+.header-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: var(--fg2);
+  border: 1px solid transparent;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  font: inherit;
+  transition: color var(--speed), border-color var(--speed);
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--bg2);
+  }
+
+  svg { fill: currentColor; }
+}
+
+.header-search {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+// 主题把切换按钮绝对定位到 $padding（相对 body），这里改为相对 #header 定位，
+// 与左上角的搜索按钮左右对称
+.dark-mode-toggle {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 2;
+}
+
+/* ---------- 文章列表 ---------- */
+
+#main > .post-group {
+  margin-bottom: 1.4rem;
+
+  & > h3 {
+    margin-bottom: 0.3rem;
+    font-size: 1.05rem;
+    color: var(--fg2);
+  }
+
+  // 主题给 ul 加了左侧竖线作为时间轴锚点，这里保留但收紧缩进
+  & > ul {
+    margin-left: 0.35rem;
+    padding-left: 1rem;
+
+    @media screen and (min-width: $mobile) {
+      margin-left: 0.5rem;
+      padding-left: 1.2rem;
+    }
+  }
+
+  & > ul > li {
+    // 单行布局：标题占据左侧，元信息靠右对齐。
+    // 元信息不再单独占一行，列表整体密度明显提高。
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.12rem 0;
+    line-height: 1.7;
+
+    // 窄屏空间不够，允许换行而不是把日期挤变形
+    @media screen and (max-width: $mobile) {
+      flex-wrap: wrap;
+      gap: 0 0.6rem;
+    }
+  }
+}
+
+.post-item-title {
+  // 标题过长时截断，保证元信息始终可见且右侧对齐
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media screen and (max-width: $mobile) {
+    white-space: normal;
+    flex: 1 1 100%;
+  }
+}
+
+.post-item-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  flex-shrink: 0;
+  color: var(--fg4);
+  font-size: 0.78rem;
+  white-space: nowrap;
+
+  time {
+    margin-left: 0;
+    min-width: 0;
+    // 等宽数字，日期列纵向对齐
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.post-item-tags {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.post-item-tag {
+  color: var(--fg3);
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.post-item-reading {
+  color: var(--fg4);
+}
+
+/* ---------- 分页 ---------- */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bg2);
+}
+
+.pagination-prev,
+.pagination-next {
+  padding: 0.5rem 1rem;
+  color: var(--fg1);
+  border: 1px solid var(--bg2);
+  border-radius: $radius-sm;
+  transition: border-color var(--speed), color var(--speed);
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+.pagination-info {
+  color: var(--fg3);
+  font-size: 0.9rem;
+}
+
+.pagination-placeholder {
+  // 占位保证「第 N / M 页」始终居中
+  flex: 0 0 auto;
+  width: 5rem;
+}
+
+/* ---------- 归档页 ---------- */
+
+.archives-summary {
+  margin-bottom: 1.5rem;
+  color: var(--fg3);
+  font-size: 0.9rem;
+}
+
+.archive-year {
+  margin-bottom: 2rem;
+}
+
+.archive-year-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--bg2);
+}
+
+.archive-year-count {
+  color: var(--fg4);
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.archive-list {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+}
+
+.archive-item {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.3rem 0;
+
+  time {
+    flex: 0 0 3.5rem;
+    margin-left: 0;
+    color: var(--fg4);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.archive-item-title {
+  line-height: 1.5;
+}
+
+/* ---------- 标签云 ---------- */
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-cloud-item a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  background-color: var(--bg_s);
+  color: var(--fg1);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: color var(--speed), border-color var(--speed);
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+.tag-cloud-count {
+  color: var(--fg4);
+  font-size: 0.75em;
+}
+
+// 按文章数分级字号，热门标签更显眼
+.tag-cloud-item {
+  &[data-level="1"] a { font-size: 0.85rem; }
+  &[data-level="2"] a { font-size: 0.95rem; }
+  &[data-level="3"] a { font-size: 1.05rem; }
+  &[data-level="4"] a { font-size: 1.2rem; }
+  &[data-level="5"] a { font-size: 1.35rem; }
+}
+
+/* ---------- 文章页 ---------- */
+
+// 阅读进度条
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  pointer-events: none;
+
+  &-bar {
+    height: 100%;
+    width: 0;
+    background-color: var(--accent);
+    transition: width 0.1s linear;
+  }
+}
+
+// 回到顶部：主题版本没有 position: fixed，实际是文章末尾一个静态按钮
+#back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 30;
+  margin: 0;
+  padding: 0.7rem;
+  background-color: var(--bg_s);
+  color: var(--fg2);
+  border: 1px solid var(--bg2);
+  border-radius: $radius-md;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--speed), visibility var(--speed), color var(--speed);
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+// 上下篇：从裸链接改为带标题的卡片
+.post-nav {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bg2);
+
+  @media screen and (min-width: $mobile) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.post-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--bg2);
+  border-radius: $radius-md;
+  transition: border-color var(--speed);
+
+  &:hover {
+    border-color: var(--accent);
+  }
+
+  &.is-next {
+    text-align: right;
+  }
+}
+
+.post-nav-label {
+  color: var(--fg4);
+  font-size: 0.78rem;
+}
+
+.post-nav-title {
+  color: var(--fg1);
+  line-height: 1.5;
+}
+
+// 相关文章
+.related-posts {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bg2);
+
+  h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    padding: 0.3rem 0;
+
+    time {
+      margin-left: 0.6rem;
+      color: var(--fg4);
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* ---------- 404 ---------- */
+
+.notfound {
+  padding: 3rem 0;
+  text-align: center;
+
+  &-code {
+    color: var(--fg4);
+    font-size: 4rem;
+    line-height: 1;
+  }
+
+  &-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+}

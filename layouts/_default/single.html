@@ -1,0 +1,116 @@
+{{ define "head" }}
+{{ $options := dict "transpiler" "dartsass" "targetPath" "css/single.css" }}
+{{ with resources.Get "sass/layouts/single.scss" | toCSS $options | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+{{ end }}
+{{ end }}
+
+{{ define "main" }}
+{{ if ne .Section "posts" }}
+{{/* 关于页等独立页面：主题原本只渲染 .Content，front matter 里的 title 从不显示 */}}
+<main id="main" class="post">
+  <h2 class="page-title">{{ .Title }}</h2>
+  <article class="content">
+    {{ .Content }}
+  </article>
+</main>
+
+{{ else }}
+<div class="reading-progress" aria-hidden="true">
+  <div class="reading-progress-bar"></div>
+</div>
+
+<main id="main" class="post">
+  <div class="post-heading">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="publish-metadata">
+      <span>
+        <svg width="0.75em" height="0.75em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 9H21M7 3V5M17 3V5M6 13H8M6 17H8M11 13H13M11 17H13M16 13H18M16 17H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (default "2006-01-02" site.Params.dateFormat) }}</time>
+      </span>
+
+      {{ if site.Params.showWordCount }}
+      <span>
+        <svg width="0.75em" height="0.75em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M15.4998 5.49994L18.3282 8.32837M3 20.9997L3.04745 20.6675C3.21536 19.4922 3.29932 18.9045 3.49029 18.3558C3.65975 17.8689 3.89124 17.4059 4.17906 16.9783C4.50341 16.4963 4.92319 16.0765 5.76274 15.237L17.4107 3.58896C18.1918 2.80791 19.4581 2.80791 20.2392 3.58896C21.0202 4.37001 21.0202 5.63634 20.2392 6.41739L8.37744 18.2791C7.61579 19.0408 7.23497 19.4216 6.8012 19.7244C6.41618 19.9932 6.00093 20.2159 5.56398 20.3879C5.07171 20.5817 4.54375 20.6882 3.48793 20.9012L3 20.9997Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ .WordCount }} 字
+      </span>
+      {{ end }}
+
+      {{ if site.Params.showReadingTime }}
+      <span>
+        <svg width="0.75em" height="0.75em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 7V12L14.5 13.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        约 {{ .ReadingTime }} 分钟
+      </span>
+      {{ end }}
+    </div>
+  </div>
+
+  {{ with .Params.tags }}
+  <div class="post-tags">
+    {{ range . }}
+    <a class="link tag" href="{{ printf "/tags/%s/" (. | urlize) }}">#{{ . }}</a>
+    {{ end }}
+  </div>
+  {{ end }}
+
+  {{ if cond (ne .Params.toc nil) .Params.toc site.Params.toc }}
+  {{ if ne .TableOfContents "<nav id=\"TableOfContents\"></nav>" }}
+  <details class="post-toc" open>
+    <summary><b>目录</b></summary>
+    <div class="toc {{ if site.Params.numberedSubtitles }}numbered-subtitles{{ end }}">{{ .TableOfContents }}</div>
+  </details>
+  {{ end }}
+  {{ end }}
+
+  <article class="content {{ if site.Params.numberedSubtitles }}numbered-subtitles{{ end }}">
+    {{ .Content }}
+  </article>
+
+  <button type="button" id="back-to-top" title="回到顶部" aria-label="回到顶部">
+    <svg width="1.1rem" height="1.1rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  {{ partial "sharingbuttons.html" . }}
+
+  {{ partial "related-posts.html" . }}
+
+  <nav class="post-nav" aria-label="上下篇导航">
+    {{ with .PrevInSection }}
+    <a class="post-nav-item is-prev" href="{{ .RelPermalink }}" rel="prev">
+      <span class="post-nav-label">← 上一篇</span>
+      <span class="post-nav-title">{{ .Title }}</span>
+    </a>
+    {{ end }}
+    {{ with .NextInSection }}
+    <a class="post-nav-item is-next" href="{{ .RelPermalink }}" rel="next">
+      <span class="post-nav-label">下一篇 →</span>
+      <span class="post-nav-title">{{ .Title }}</span>
+    </a>
+    {{ end }}
+  </nav>
+
+  <div class="comment">
+    {{ template "_internal/disqus.html" . }}
+    {{ site.Params.commentEngine.code | safeHTML }}
+  </div>
+</main>
+{{ end }}
+
+{{ if .Page.Store.Get "hasMermaid" }}
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: document.documentElement.classList.contains('darkmode') ? 'dark' : 'default',
+  });
+</script>
+{{ end }}
+{{ end }}

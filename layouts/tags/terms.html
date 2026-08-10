@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{/* 主题原模板给每个 term 单独包一个 <ul>（语义错误），且文案是英文。
+     这里改成单个列表 + 按文章数分级字号的标签云。 */}}
+{{ $terms := .Data.Terms.ByCount }}
+<main id="main" class="archive">
+  <h2 class="page-title">标签</h2>
+  <p class="archives-summary">共 {{ len $terms }} 个标签</p>
+
+  {{ $max := 1 }}
+  {{ range $terms }}
+    {{ $n := len .Pages }}
+    {{ if gt $n $max }}{{ $max = $n }}{{ end }}
+  {{ end }}
+
+  <ul class="tag-cloud">
+    {{ range $terms }}
+    {{ $n := len .Pages }}
+    {{/* 按占比分 5 档字号，热门标签更显眼 */}}
+    {{ $level := math.Ceil (mul (div (float $n) $max) 5) }}
+    {{ if lt $level 1.0 }}{{ $level = 1.0 }}{{ end }}
+    <li class="tag-cloud-item" data-level="{{ int $level }}">
+      <a href="{{ .Page.RelPermalink }}">
+        #{{ .Page.Title }}
+        <span class="tag-cloud-count">{{ $n }}</span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+</main>
+{{ end }}

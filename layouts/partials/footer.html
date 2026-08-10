@@ -1,0 +1,10 @@
+{{/* 覆盖主题 footer：.Site.Author 在 Hugo 0.146 起已移除，改读 params.author */}}
+{{- $author := or site.Params.author site.Title -}}
+<footer id="footer">
+  <div>
+    <span>{{ site.Params.footnote | safeHTML }}</span>
+  </div>
+  <div>
+    <span>Copyright © {{ now.Format "2006" }} {{ $author }}</span>
+  </div>
+</footer>

@@ -15,6 +15,29 @@ rssLimit = 20
 [pagination]
 pagerSize = 30
 
+# 把 static/images 同时挂到 assets 下，让 render-image.html 能通过 resources.Get
+# 读到图片真实宽高并写入 width/height（避免加载过程中版面跳动）。
+# 显式声明 static/assets/layouts 等挂载点，否则一旦出现 [[module.mounts]] 就会覆盖默认值。
+[module]
+  [[module.mounts]]
+    source = "content"
+    target = "content"
+  [[module.mounts]]
+    source = "static"
+    target = "static"
+  [[module.mounts]]
+    source = "layouts"
+    target = "layouts"
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "archetypes"
+    target = "archetypes"
+  [[module.mounts]]
+    source = "static/images"
+    target = "assets/images"
+
 [taxonomies]
 tags = "tags"
 categories = "categories"
@@ -50,8 +73,23 @@ numberedSubtitles = false
 emphasisWithDots = false
 
 # 自定义 CSS 和 JS
-customCSS = ["/css/custom.css", "/css/cool-style.css"]
+# 原 /css/custom.css 与 /css/cool-style.css 已并入 assets/sass/custom/，
+# 走 SCSS 管道以获得 minify + fingerprint，同时消除 !important 冲突
+customCSS = []
 customJS = []
+
+# 强调色：黑白极简配色中唯一的彩色
+accentColor = "#4a90e2"
+
+# 正文最大行宽（配合 vars.scss 的 $max-width 钳制过长行）
+contentMaxWidth = "46rem"
+
+# 显示字数与阅读时长
+showWordCount = true
+showReadingTime = true
+
+# 相关文章数量
+relatedCount = 5
 
 # Giscus 评论引擎
 [params.commentEngine]
@@ -95,6 +133,8 @@ telegram = false
     url = "/"
     weight = 1
 
+  # 归档与搜索不占菜单位：搜索走左上角图标与 ⌘K，
+  # /archives/ 与 /search/ 页面仍保留（404 页与搜索面板底部有链接）
   [[menu.main]]
     name = "标签"
     url = "/tags/"
@@ -115,14 +155,28 @@ telegram = false
   [markup.highlight]
     codeFences = true
     style = 'gruvbox'
+    # noClasses = false 让 Chroma 输出 .chroma 类而非内联样式。
+    # 默认的内联模式会把 gruvbox 暗色前景 #ebdbb2 写死在 style 属性上，
+    # 主题只用 !important 覆盖了背景色，于是浅色模式下浅黄字落在 #f5f5f5 背景上，
+    # 实测对比度仅 1.26（WCAG AA 需 4.5）。改用类模式后由
+    # themes/hugo-texify3/assets/sass/syntax.scss 接管，颜色跟随明暗主题。
+    noClasses = false
 
   [markup.goldmark.renderer]
     unsafe = true
 
-# 输出格式 - 支持 RSS
+# 输出格式 - 支持 RSS 与搜索索引
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "SearchIndex"]
   section = ["HTML", "RSS"]
+
+# 搜索索引：仅在首页输出 /search-index.json，按需 fetch，不进首屏
+[outputFormats]
+  [outputFormats.SearchIndex]
+    mediaType = "application/json"
+    baseName = "search-index"
+    isPlainText = true
+    notAlternative = true
 
 # 隐私配置
 [privacy]

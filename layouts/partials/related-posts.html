@@ -1,0 +1,34 @@
+{{/*
+  相关文章：按标签交集打分，Hugo 侧静态计算，无运行时成本。
+  0 篇文章有 categories，所以只用 tags。
+*/}}
+{{ $current := . }}
+{{ $count := default 5 site.Params.relatedCount }}
+{{ with .Params.tags }}
+  {{ $tags := . }}
+  {{ $scored := slice }}
+  {{ range where site.RegularPages "Type" "posts" }}
+    {{ if ne .RelPermalink $current.RelPermalink }}
+      {{ $shared := intersect $tags (.Params.tags | default slice) }}
+      {{ if $shared }}
+        {{ $scored = $scored | append (dict "page" . "score" (len $shared)) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ with $scored }}
+    {{/* 先按共同标签数降序，同分时新文章优先 */}}
+    {{ $sorted := sort (sort . "page.Date" "desc") "score" "desc" }}
+    <section class="related-posts">
+      <h3>相关文章</h3>
+      <ul>
+        {{ range first $count $sorted }}
+        <li>
+          <a class="link" href="{{ .page.RelPermalink }}">{{ .page.Title }}</a>
+          <time datetime="{{ .page.Date.Format "2006-01-02" }}">{{ .page.Date.Format "2006-01-02" }}</time>
+        </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+{{ end }}
