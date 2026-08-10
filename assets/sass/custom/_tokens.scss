@@ -1,0 +1,48 @@
+/*
+ * 设计令牌
+ *
+ * 配色策略：黑白极简 + 单一强调色。
+ * 黑白基调由 assets/sass/gruvbox.scss（覆盖主题同名文件）提供 --bg* / --fg* 变量，
+ * 这里只补一个强调色及其派生值，取代此前散落在 custom.css / cool-style.css 中的
+ * #4a90e2、#ff3366、#1e1e1e 等硬编码。
+ */
+
+// 正文最大行宽：约 65–75 个拉丁字符，避免宽屏下行长过大伤害可读性
+$content-max-width: 46rem !default;
+$gutter: 1.5rem !default;
+$mobile: 768px !default;
+$radius-sm: 4px !default;
+$radius-md: 8px !default;
+
+:root {
+  --accent: #4a90e2;
+  --accent-strong: #2f6fb8;
+  // 强调色的低透明度铺底，用于行内代码、标记等
+  --accent-wash: rgba(74, 144, 226, 0.1);
+  --accent-ring: rgba(74, 144, 226, 0.4);
+
+  --content-max-width: #{$content-max-width};
+
+  // 过渡时长统一，便于一处调节动效节奏
+  --speed-fast: 0.15s;
+  --speed: 0.25s;
+}
+
+.darkmode {
+  --accent: #6aa9ee;
+  --accent-strong: #8cc0f5;
+  --accent-wash: rgba(106, 169, 238, 0.16);
+  --accent-ring: rgba(106, 169, 238, 0.45);
+}
+
+// 尊重系统的降低动效偏好
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

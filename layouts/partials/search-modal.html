@@ -1,0 +1,37 @@
+{{/* Cmd/Ctrl+K 命令面板，挂在 baseof 底部，全站可用 */}}
+<div id="search-modal" class="search-modal" hidden role="dialog" aria-modal="true" aria-label="站内搜索">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-panel">
+    <div class="search-modal-header">
+      <svg class="search-modal-icon" aria-hidden="true" viewBox="0 0 16 16" width="1rem" height="1rem" fill="currentColor">
+        <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+      </svg>
+      <label class="visually-hidden" for="search-modal-input">搜索文章</label>
+      <input
+        type="search"
+        id="search-modal-input"
+        class="search-modal-input"
+        placeholder="搜索文章…"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="search-modal-results"
+        aria-autocomplete="list">
+      <button type="button" class="search-modal-close" data-search-close aria-label="关闭搜索">Esc</button>
+    </div>
+
+    <p id="search-modal-status" class="search-status" role="status" aria-live="polite"></p>
+
+    <ul id="search-modal-results" class="search-results" role="listbox" aria-label="搜索结果"></ul>
+
+    <div class="search-modal-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+      <span><kbd>Enter</kbd> 打开</span>
+      <span><kbd>Esc</kbd> 关闭</span>
+      <a href="/search/">完整搜索页 →</a>
+    </div>
+  </div>
+</div>

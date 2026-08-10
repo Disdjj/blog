@@ -1,0 +1,5 @@
+{{/* 主题的 list.scss 提供文章列表左侧的时间轴竖线，index.html 与 list.html 共用 */}}
+{{ $options := dict "transpiler" "dartsass" "targetPath" "css/list.css" }}
+{{ with resources.Get "sass/layouts/list.scss" | toCSS $options | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+{{ end }}

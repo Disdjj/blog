@@ -1,0 +1,24 @@
+{{- /*
+  标题渲染钩子
+
+  两件事：
+  1. 去掉重复大标题。149 篇文章里有 89 篇正文首行的 `# 标题` 与 front matter 的 title
+     完全相同，而 single.html 已经渲染了 .post-title，页面上会出现两个同样的大标题。
+     文章由 siyuan-plugin-publisher 自动生成并覆盖，不能改 markdown，只能在渲染层跳过。
+     只跳过第一个、且文本与 title 相同的 h1，后续同名标题保留。
+  2. 加锚点链接，方便分享到具体章节。
+*/ -}}
+{{- $isDuplicateTitle := and
+      (eq .Level 1)
+      (eq (.Text | plainify | htmlUnescape) .Page.Title)
+      (not (.Page.Store.Get "titleH1Skipped"))
+-}}
+
+{{- if $isDuplicateTitle -}}
+  {{- .Page.Store.Set "titleH1Skipped" true -}}
+{{- else -}}
+<h{{ .Level }} id="{{ .Anchor }}">
+  {{- .Text | safeHTML -}}
+  <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="本节链接">#</a>
+</h{{ .Level }}>
+{{- end -}}

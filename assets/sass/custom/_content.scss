@@ -1,0 +1,239 @@
+/*
+ * 正文内容样式
+ *
+ * 取代原 static/css/cool-style.css 中的代码块 / 链接 / 引用部分。
+ * 主要变化：代码块底色不再硬编码 #1e1e1e，改用主题变量，浅色模式下不再突兀；
+ * 强调色统一走 --accent。
+ */
+
+@use "tokens" as *;
+
+.content {
+  // 中文正文两端对齐会产生不均匀字距，改为左对齐更适合混排
+  p {
+    text-align: left;
+  }
+
+  // 标题层级：主题按黄金比例算出的字号在中文下偏大，这里收敛
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.65rem; }
+  h3 { font-size: 1.35rem; }
+  h4 { font-size: 1.15rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.95rem; }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 2rem;
+    line-height: 1.4;
+    scroll-margin-top: 2rem;
+  }
+
+  // 标题锚点：悬停时在左侧浮出 #，不占据布局空间
+  .heading-anchor {
+    margin-left: 0.4rem;
+    color: var(--fg4);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity var(--speed);
+  }
+
+  h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+    .heading-anchor { opacity: 1; }
+  }
+
+  .heading-anchor:focus-visible {
+    opacity: 1;
+  }
+
+  // 链接：下划线随悬停展开
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    background-image: linear-gradient(to right, var(--accent) 0%, var(--accent) 100%);
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    background-repeat: no-repeat;
+    transition: background-size var(--speed);
+
+    &:hover,
+    &:focus-visible {
+      background-size: 100% 2px;
+    }
+  }
+
+  // 代码块：跟随主题明暗，左侧强调色细条
+  pre {
+    position: relative;
+    overflow: auto;
+    padding: 1.25rem;
+    background-color: var(--bg_s);
+    border: 1px solid var(--bg2);
+    border-left: 3px solid var(--accent);
+    border-radius: $radius-md;
+
+    code {
+      display: block;
+      padding: 0;
+      background: none;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+  }
+
+  // 行内代码
+  p code,
+  li code,
+  td code {
+    padding: 0.1em 0.4em;
+    background-color: var(--accent-wash);
+    color: var(--accent-strong);
+    border-radius: $radius-sm;
+    font-size: 0.9em;
+    word-break: break-word;
+  }
+
+  blockquote {
+    padding: 0.8rem 1.2rem;
+    background-color: var(--bg_s);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 $radius-sm $radius-sm 0;
+    color: var(--fg2);
+    font-style: normal;
+  }
+
+  // 图片：由 render-image.html 输出 figure 结构
+  figure {
+    margin: 1.5rem 0;
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: $radius-sm;
+      cursor: zoom-in;
+    }
+
+    figcaption {
+      margin-top: 0.5rem;
+      color: var(--fg3);
+      font-size: 0.85rem;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  ol, ul {
+    padding-left: 1.2rem;
+    margin-left: 0.5rem;
+  }
+
+  li {
+    line-height: 1.9;
+  }
+}
+
+// 复制按钮：主题定位为 absolute，长代码块横向滚动时会跟着跑出视野
+button.copy-button {
+  position: sticky;
+  top: 0.5rem;
+  left: 100%;
+  float: right;
+  z-index: 5;
+  margin-left: -2.5rem;
+  background-color: var(--bg1);
+  color: var(--fg2);
+  opacity: 0.6;
+  transition: opacity var(--speed);
+
+  &:hover {
+    opacity: 1;
+    color: var(--accent);
+  }
+}
+
+// 图片点击放大的遮罩层
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.85);
+  cursor: zoom-out;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: $radius-sm;
+  }
+}
+
+/*
+ * 语法高亮：浅色模式对比度修正
+ *
+ * hugo.toml 里设了 noClasses = false，高亮改由主题的 syntax.scss 用 .chroma 类接管
+ * （此前 Chroma 输出内联样式，把 gruvbox 暗色前景写死在 style 属性上，浅色下几乎看不见）。
+ *
+ * 但 syntax.scss 的浅色段沿用 gruvbox light 原始配色，在本站 #f5f5f5 的代码块底色上
+ * 有 29 个类低于 WCAG AA 的 4.5:1，实测最低到 2.52。
+ *
+ * 下面按色相分组压暗，保留 gruvbox 的辨识度，仅提高明度差。
+ * 每个替换值的对比度已实测，注释中标注 原值 → 新值。
+ * 暗色模式实测最低 5.39，已达标，因此这里只改浅色。
+ */
+.content {
+  // 绿：字符串类（.s .s1 .s2 .sa .sb .sc .sd .se .sh .si .sx .sr .dl）与属性名、标题
+  // #79740e 4.46 → #5f5a0b 6.52
+  .chroma {
+    .s, .s1, .s2, .sa, .sb, .sc, .sd, .se, .sh, .si, .sx, .sr, .dl,
+    .na, .gh, .gu {
+      color: #5f5a0b;
+    }
+
+    // 黄：类型、内建、函数名  #b57614 3.46 → #795311 6.30
+    .kt, .nb, .ni, .nf {
+      color: #795311;
+    }
+
+    // 灰：注释  #928374 3.37 → #665c54 5.97
+    .c, .ch, .cm, .c1, .cs {
+      color: #665c54;
+    }
+
+    // 灰：行号  #9d9b9a 2.54 → #665c54 5.97
+    .ln, .lnt {
+      color: #665c54;
+    }
+
+    // 红：异常名  #fb4934 3.16 → #9d0006 7.91
+    .ne {
+      color: #9d0006;
+    }
+
+    // 紫：常量  #d3869b 2.52 → #8f3f71 6.18
+    .no {
+      color: #8f3f71;
+    }
+  }
+}
+
+// 暗色模式下不套用上面的压暗值，恢复主题原本的亮色前景
+.darkmode .content .chroma {
+  .s, .s1, .s2, .sa, .sb, .sc, .sd, .se, .sh, .si, .sx, .sr, .dl,
+  .na, .gh, .gu { color: #b8bb26; }
+  .kt, .nb, .ni, .nf { color: #fabd2f; }
+  .c, .ch, .cm, .c1, .cs { color: #928374; }
+  .ln, .lnt { color: #7c6f64; }
+  .ne { color: #fb4934; }
+  .no { color: #d3869b; }
+}

@@ -1,0 +1,39 @@
+{{- /*
+  图片渲染钩子
+
+  static/images 有 12MB 且全站图片此前没有 loading=lazy、也没有尺寸声明，
+  导致首屏偏慢且加载过程中版面跳动（CLS）。这里：
+    - 一律 lazy + async decoding
+    - 本地图片读出真实宽高写进 width/height，让浏览器提前留好版面
+    - 有 title 或 alt 时输出 <figure> + <figcaption>
+*/ -}}
+{{- $src := .Destination | safeURL -}}
+{{- $alt := .Text | plainify -}}
+{{- $caption := or .Title $alt -}}
+
+{{- $width := "" -}}
+{{- $height := "" -}}
+
+{{- /* 仅对站内图片取尺寸；外链图片拿不到本地资源 */ -}}
+{{- if not (urls.Parse .Destination).Host -}}
+  {{- $path := strings.TrimPrefix "/" .Destination -}}
+  {{- with resources.Get (printf "/%s" $path) -}}
+    {{- if in (slice "image" ) (index (split .MediaType.Type "/") 0) -}}
+      {{- with .Width }}{{ $width = . }}{{ end -}}
+      {{- with .Height }}{{ $height = . }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<figure>
+  <img
+    src="{{ $src }}"
+    alt="{{ $alt }}"
+    loading="lazy"
+    decoding="async"
+    {{- with $width }} width="{{ . }}"{{ end }}
+    {{- with $height }} height="{{ . }}"{{ end }}>
+  {{- with $caption }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>

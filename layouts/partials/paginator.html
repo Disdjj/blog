@@ -1,0 +1,23 @@
+{{/*
+  分页控件。此前 index.html 与 list.html 各自内联了一份 HTML 与 <style>，现收敛到这里，
+  样式移入 assets/sass/custom/_components.scss。
+  入参：dict "paginator" $paginator
+*/}}
+{{ $paginator := .paginator }}
+{{ if gt $paginator.TotalPages 1 }}
+<nav class="pagination" aria-label="分页导航">
+  {{ if $paginator.HasPrev }}
+  <a href="{{ $paginator.Prev.URL }}" class="pagination-prev" rel="prev">← 上一页</a>
+  {{ else }}
+  <span class="pagination-placeholder"></span>
+  {{ end }}
+
+  <span class="pagination-info">第 {{ $paginator.PageNumber }} / {{ $paginator.TotalPages }} 页</span>
+
+  {{ if $paginator.HasNext }}
+  <a href="{{ $paginator.Next.URL }}" class="pagination-next" rel="next">下一页 →</a>
+  {{ else }}
+  <span class="pagination-placeholder"></span>
+  {{ end }}
+</nav>
+{{ end }}

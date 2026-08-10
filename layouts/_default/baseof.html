@@ -1,12 +1,28 @@
+{{- $author := or site.Params.author site.Title -}}
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}" style="font-size: {{ .Site.Params.rootFontSize | default "100%" }}">
+<html lang="{{ or site.Language.LanguageCode site.LanguageCode "zh-cn" }}" style="font-size: {{ .Site.Params.rootFontSize | default "100%" }}">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  {{/* 明暗模式必须在渲染前定好，否则先画浅色再跳暗色会闪白。
+       script.js 是 defer 的，来不及，所以这里内嵌一段阻塞式脚本。 */}}
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("darkMode");
+        var dark = stored === "enabled"
+          || (stored === null && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) {
+          document.documentElement.classList.add("darkmode");
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- author -->
-  <meta name="author" content="{{ .Site.Author.name }}">
+  <meta name="author" content="{{ $author }}">
 
   <!-- description -->
   {{ if .Description }}
@@ -29,10 +45,12 @@
   <meta name="keywords" content='{{ delimit .Site.Params.keywords " " }}'>
   {{ end }}
 
-  <!-- 自定义字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
+  {{/*
+    字体全部使用系统自带，不再从 fonts.googleapis.com 加载。
+    LXGW WenKai Mono TC 是完整中文楷体，Google 按 unicode-range 切片后
+    首页实测下载 1.5 MB / 28 个分片，且 gstatic 在国内访问不稳定。
+    字体栈见 assets/sass/custom/_base.scss。
+  */}}
 
   <!-- math -->
   {{ if or .Params.math .Site.Params.math }}
@@ -68,12 +86,20 @@
     <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
   {{ end }}
 
+  {{/* 自定义样式放在主题样式之后，靠层叠顺序覆盖，不需要 !important */}}
+  {{ $options := dict "transpiler" "dartsass" "targetPath" "css/custom.css" }}
+  {{ with resources.Get "sass/custom.scss" | toCSS $options | postCSS | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+  {{ end }}
+
   <!-- title -->
   {{ if .IsHome }}
   <title>{{ .Site.Title }}</title>
   {{ else }}
   <title>{{ .Title }} - {{ .Site.Title }}</title>
   {{ end }}
+
+  {{/* 搜索索引不预加载：仅在用户首次触发搜索时 fetch，避免每次访问都拉几百 KB */}}
 
   <!-- twitter -->
   {{ template "_internal/twitter_cards.html" . }}
@@ -85,14 +111,28 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+
   <div id="wrapper">
     {{ partial "header.html" . }}
     {{ block "main" . }}{{ end }}
     {{ partial "footer.html" . }}
   </div>
 
+  {{ partial "search-modal.html" . }}
+
   <!-- javascript -->
   <script src='{{ "js/script.js" | absURL }}' defer></script>
+
+  {{/* 搜索与界面增强脚本，走 js.Build 打包成 ES module */}}
+  {{ $opts := dict "minify" hugo.IsProduction "target" "es2018" }}
+  {{ with resources.Get "js/search-ui.js" | js.Build $opts | fingerprint }}
+  <script type="module" src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+  {{ end }}
+
+  {{ with resources.Get "js/enhance.js" | js.Build $opts | fingerprint }}
+  <script type="module" src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+  {{ end }}
 
   <!-- custom css -->
   {{ range .Site.Params.customCSS }}
