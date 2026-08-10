@@ -1,0 +1,167 @@
+/*
+ * 基础排版与可访问性
+ *
+ * 取代原 static/css/custom.css：那里用 !important 强制了 "Latin Modern Roman"，
+ * 但 assets/sass/fonts.scss 早已不再加载该字体，实际渲染落到 Georgia/Times，
+ * 同时压掉了主题想要的 LXGW WenKai Mono TC。这里统一字体栈且不使用 !important。
+ */
+
+@use "tokens" as *;
+
+/*
+ * 字体栈：全部使用系统字体，不加载 webfont。
+ *
+ * 原先主题从 fonts.googleapis.com 拉 LXGW WenKai Mono TC，实测首页仅字体就
+ * 下载 1.5 MB / 28 个分片（完整中文楷体按 unicode-range 切片，中文页面命中极多），
+ * 比整个搜索索引还大 6 倍，且 gstatic 在国内不稳定。
+ *
+ * 衬线优先，营造纸质印刷的阅读感；标题与正文同一字体栈，层级靠字号与字重区分。
+ */
+
+// 正文：西文衬线 + 中文宋体，均取系统自带
+$font-body:
+  // 西文衬线：各平台优质衬线体
+  "Iowan Old Style",
+  "Palatino Linotype",
+  Palatino,
+  Georgia,
+  // 中文宋体：macOS / iOS → Windows → Linux
+  "Songti SC",
+  "Songti TC",
+  STSong,
+  SimSun,
+  "Noto Serif CJK SC",
+  "Source Han Serif SC",
+  serif;
+
+// 代码：系统等宽体。原先声明的 Source Code Pro 页面从未加载，
+// 实际一直落到系统等宽体，这里如实写清优先级。
+$font-mono:
+  ui-monospace,
+  SFMono-Regular,
+  "SF Mono",
+  Menlo,
+  Monaco,
+  "Cascadia Mono",
+  Consolas,
+  "Liberation Mono",
+  monospace;
+
+html {
+  scroll-behavior: smooth;
+  // 让浏览器表单控件、滚动条跟随明暗主题
+  color-scheme: light;
+  // 锚点跳转时给标题留出呼吸空间
+  scroll-padding-top: 2rem;
+}
+
+html.darkmode,
+body.darkmode {
+  color-scheme: dark;
+}
+
+// 主题在 common.scss 用 #wrapper 声明字体，这里同为 ID 选择器，
+// 靠 custom.scss 的加载顺序在后取胜
+body,
+#wrapper {
+  font-family: $font-body;
+}
+
+// 主题的 .content pre / .content code 是类选择器，优先级高于裸元素选择器，
+// 必须写到同等特异性才能覆盖
+code,
+pre,
+kbd,
+samp,
+.content pre,
+.content code,
+.content kbd {
+  font-family: $font-mono;
+}
+
+/* 可访问性：全站统一焦点环。
+   此前只有搜索框有 :focus 样式，键盘用户在其他地方完全看不到焦点位置。
+   用 :focus-visible 以免鼠标点击时也出现焦点环。 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: $radius-sm;
+}
+
+// 屏幕阅读器专用文本
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// 跳到主内容：键盘用户可绕过页头导航
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--accent);
+  border-radius: $radius-sm;
+
+  &:focus {
+    top: 0.5rem;
+  }
+}
+
+::selection {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+// 极简滚动条
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--fg4);
+  border-radius: $radius-sm;
+
+  &:hover {
+    background-color: var(--fg2);
+  }
+}
+
+// 收敛正文行宽：$max-width 为 70vw，宽屏下行长接近 1400px，远超舒适阅读区间
+#main {
+  margin-left: auto;
+  margin-right: auto;
+
+  // 文章正文限制在舒适阅读行宽内
+  &.post {
+    max-width: var(--content-max-width);
+  }
+
+  // 列表类页面标题短、右侧要放元信息，可以比正文宽一些
+  &.archive,
+  &.archives,
+  &.search-page {
+    max-width: 52rem;
+  }
+}
+
+// 页面级标题（归档 / 搜索 / 标签等）
+.page-title {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}

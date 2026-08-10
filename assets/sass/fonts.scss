@@ -1,4 +1,13 @@
-/* 自定义字体 - 使用 Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=LXGW+WenKai+Mono+TC&display=swap');
-
-/* 不加载原有的 Latin Modern 字体，直接使用 Google Fonts */
+/*
+ * 覆盖主题的 themes/hugo-texify3/assets/sass/fonts.scss（由 common.scss @import）。
+ *
+ * 这里刻意为空：不声明任何 @font-face，也不 @import 远端字体。
+ *
+ * 主题原版加载 Latin Modern 的本地 woff2；此前本项目改为从 Google Fonts 拉
+ * LXGW WenKai Mono TC + Google Sans Code，但实测首页仅字体就下载 1.5 MB / 28 个
+ * 分片（完整中文楷体按 unicode-range 切片，中文页面命中极多），且 gstatic 在国内
+ * 访问不稳定。
+ *
+ * 现全站改用系统字体，字体栈定义见 assets/sass/custom/_base.scss。
+ * 注意：删掉此文件会让主题原版的 Latin Modern @font-face 重新生效，故保留为空文件。
+ */
