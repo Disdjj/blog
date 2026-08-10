@@ -1,0 +1,13 @@
+/*
+ * 自定义样式入口
+ *
+ * 原先的 static/css/custom.css 与 static/css/cool-style.css 通过 params.customCSS
+ * 以裸文件形式加载，拿不到 minify/fingerprint，且必须靠 !important 才能盖住主题。
+ * 现改为走 Hugo 的 SCSS 管道，在主题样式之后加载，用层叠顺序取代 !important。
+ */
+
+@use "custom/tokens";
+@use "custom/base";
+@use "custom/content";
+@use "custom/components";
+@use "custom/search";
