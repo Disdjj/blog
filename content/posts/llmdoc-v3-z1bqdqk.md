@@ -3,7 +3,7 @@ title: llmdoc v3
 slug: llmdoc-v3-z1bqdqk
 url: /post/llmdoc-v3-z1bqdqk.html
 date: '2026-08-31 16:04:29+08:00'
-lastmod: '2026-08-31 17:08:29+08:00'
+lastmod: '2026-08-31 17:10:42+08:00'
 toc: true
 isCJKLanguage: true
 ---
