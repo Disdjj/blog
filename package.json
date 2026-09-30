@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "// 说明": "Hugo 的 dartsass transpiler 需要在 PATH 里找到 sass 可执行文件。sass-embedded 装在 node_modules/.bin 下，不在默认 PATH 中，所以这里显式前置。裸跑 hugo 会因此报 'You need to install Dart Sass' 而构建失败。",
+    "dev": "PATH=\"$PWD/node_modules/.bin:$PATH\" hugo server --disableFastRender",
+    "build": "PATH=\"$PWD/node_modules/.bin:$PATH\" hugo --minify --gc"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
