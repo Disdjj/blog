@@ -60,12 +60,9 @@
   {{ end }}
 
   {{ if cond (ne .Params.toc nil) .Params.toc site.Params.toc }}
-  {{ if ne .TableOfContents "<nav id=\"TableOfContents\"></nav>" }}
-  <details class="post-toc" open>
-    <summary><b>目录</b></summary>
-    <div class="toc {{ if site.Params.numberedSubtitles }}numbered-subtitles{{ end }}">{{ .TableOfContents }}</div>
-  </details>
-  {{ end }}
+  {{/* 目录由 enhance.js 按正文实际标题生成：文章多用 h1 写章节，而 .TableOfContents
+       默认从 h2 起，且会包含被 render-heading 跳过的重复标题 */}}
+  <div id="toc-mount" class="toc-mount"></div>
   {{ end }}
 
   <article class="content {{ if site.Params.numberedSubtitles }}numbered-subtitles{{ end }}">

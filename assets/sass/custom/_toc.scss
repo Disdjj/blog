@@ -1,0 +1,158 @@
+/*
+ * 文章目录
+ *
+ * 结构由 assets/js/enhance.js 的 initToc() 生成：
+ *   #toc-mount > aside.post-toc > .post-toc-label + nav > ul > li > a > .post-toc-text (+ ul)
+ * 固定在视口左侧。平时只是一列短横线（每条对应一个章节，当前章节高亮），
+ * 几乎不占视线；鼠标移入或键盘聚焦时展开成带标题的面板。
+ * 触屏设备没有悬停，左侧也没有空间，直接隐藏。
+ */
+
+@use "tokens" as *;
+
+// 收起态宽度：只容纳横线，必须小于正文左侧留白
+$toc-collapsed: 1.75rem;
+$toc-expanded: 18rem;
+
+.post-toc {
+  display: none;
+}
+
+@media screen and (min-width: 900px) and (hover: hover) {
+  .post-toc {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 0.75rem;
+    z-index: 35;
+    width: $toc-collapsed;
+    padding: 0.75rem 0;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: $radius-md;
+    color: var(--fg4);
+    transform: translateY(-50%);
+    // 收起稍作延迟，鼠标划出边缘时不至于立刻闪回
+    transition: width var(--speed) 0.15s, background-color var(--speed) 0.15s,
+      border-color var(--speed) 0.15s, box-shadow var(--speed) 0.15s;
+  }
+
+  .post-toc-label {
+    height: 0;
+    padding-left: 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  .post-toc nav {
+    max-height: 70vh;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .post-toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // 收起态：每个条目只是一条短横线
+  .post-toc a {
+    display: block;
+    position: relative;
+    height: 0.6rem;
+    padding-left: 0.5rem;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      width: 0.75rem;
+      height: 2px;
+      border-radius: 1px;
+      background-color: var(--bg3);
+      transform: translateY(-50%);
+      transition: width var(--speed-fast), background-color var(--speed-fast);
+    }
+
+    &.is-active::before {
+      width: 1rem;
+      background-color: var(--accent);
+    }
+  }
+
+  .post-toc li > ul a::before {
+    left: 0.75rem;
+    width: 0.45rem;
+  }
+
+  .post-toc-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0;
+  }
+
+  // 展开态：显示标题，字号与宽度放大
+  .post-toc:hover,
+  .post-toc:focus-within {
+    width: $toc-expanded;
+    background-color: var(--bg);
+    border-color: var(--bg2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition-delay: 0s;
+
+    .post-toc-label {
+      height: auto;
+      margin-bottom: 0.5rem;
+      opacity: 1;
+    }
+
+    nav {
+      overflow-y: auto;
+    }
+
+    a {
+      height: auto;
+      padding: 0.2rem 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+
+      &::before {
+        display: none;
+      }
+
+      &:hover {
+        color: var(--fg);
+      }
+
+      &.is-active {
+        box-shadow: inset 2px 0 var(--accent);
+        color: var(--fg);
+        font-weight: 600;
+      }
+    }
+
+    li > ul a {
+      padding-left: 1.75rem;
+      font-size: 0.8125rem;
+    }
+
+    .post-toc-text {
+      opacity: 1;
+      transition: opacity var(--speed) 0.05s;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 /*
  * 界面增强
  *
- * 明暗切换、回到顶部、阅读进度、图片放大。
+ * 明暗切换、回到顶部、阅读进度、文章目录、图片放大。
  * 明暗状态的 class 挂在 <html> 上（由 baseof.html 内嵌的防闪白脚本设置），
  * 与主题 script.js 挂在 <body> 上的做法不同，因此这里接管切换逻辑。
  */
@@ -77,6 +77,110 @@ function initReadingProgress() {
   window.addEventListener('resize', update);
 }
 
+/* ---------- 文章目录 ---------- */
+
+// 目录固定在视口左侧：平时收成一列短横线，悬停或键盘聚焦时展开显示标题
+// 标题顶端越过视口这条线即视为进入该章节
+const TOC_ACTIVE_OFFSET = 120;
+
+function initToc() {
+  const mount = document.getElementById('toc-mount');
+  const article = document.querySelector('article.content');
+  if (!mount || !article) return;
+
+  const all = [...article.querySelectorAll('h1[id], h2[id], h3[id], h4[id]')];
+  if (!all.length) return;
+
+  // 文章标题层级不统一（有的从 h1 起，有的从 h2 起），取实际出现的最浅两级
+  const levelOf = (heading) => Number(heading.tagName[1]);
+  const top = Math.min(...all.map(levelOf));
+  const headings = all.filter((heading) => levelOf(heading) <= top + 1);
+  if (headings.length < 3) return;
+
+  const toc = document.createElement('aside');
+  toc.className = 'post-toc';
+  const label = document.createElement('div');
+  label.className = 'post-toc-label';
+  label.textContent = '目录';
+  const nav = document.createElement('nav');
+  nav.setAttribute('aria-label', '文章目录');
+
+  const rootList = document.createElement('ul');
+  let subList = null;
+  const links = headings.map((heading) => {
+    const clone = heading.cloneNode(true);
+    clone.querySelectorAll('.heading-anchor').forEach((anchor) => anchor.remove());
+    const text = clone.textContent.trim();
+
+    const link = document.createElement('a');
+    link.href = `#${encodeURIComponent(heading.id)}`;
+    link.title = text;
+    const textNode = document.createElement('span');
+    textNode.className = 'post-toc-text';
+    textNode.textContent = text;
+    link.appendChild(textNode);
+    const item = document.createElement('li');
+    item.appendChild(link);
+
+    if (levelOf(heading) === top || !rootList.lastElementChild) {
+      rootList.appendChild(item);
+      subList = null;
+    } else {
+      if (!subList) {
+        subList = document.createElement('ul');
+        rootList.lastElementChild.appendChild(subList);
+      }
+      subList.appendChild(item);
+    }
+    return link;
+  });
+
+  nav.appendChild(rootList);
+  toc.append(label, nav);
+  mount.appendChild(toc);
+
+  let active = null;
+  const setActive = (link) => {
+    if (link === active) return;
+    if (active) {
+      active.classList.remove('is-active');
+      active.removeAttribute('aria-current');
+    }
+    active = link;
+    if (!link) return;
+    link.classList.add('is-active');
+    link.setAttribute('aria-current', 'true');
+
+    // 目录较长时让当前项留在侧栏可视区内；不用 scrollIntoView，以免带动整页滚动
+    if (nav.scrollHeight > nav.clientHeight) {
+      const offset = link.offsetTop - nav.offsetTop;
+      if (offset < nav.scrollTop || offset > nav.scrollTop + nav.clientHeight - link.offsetHeight) {
+        nav.scrollTop = offset - nav.clientHeight / 2;
+      }
+    }
+  };
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    let index = -1;
+    for (let i = 0; i < headings.length; i += 1) {
+      if (headings[i].getBoundingClientRect().top > TOC_ACTIVE_OFFSET) break;
+      index = i;
+    }
+    setActive(index >= 0 ? links[index] : null);
+  };
+  const schedule = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  update();
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+}
+
 /* ---------- 图片点击放大 ---------- */
 
 function initLightbox() {
@@ -119,6 +223,7 @@ function init() {
   initDarkMode();
   initBackToTop();
   initReadingProgress();
+  initToc();
   initLightbox();
 }
 
