@@ -30,9 +30,51 @@ isCJKLanguage: true
 
 最朴素的 memory 系统只有两条路径：
 
-```
-写入：用户说了一句话 ──► 值得记吗？──► 是什么类型/tag/优先级？──► 生成记忆内容 ──► 存储
-召回：用户说了一句话 ──► 需要翻旧账吗？──► 哪类记忆？──► 哪几条最相关？──► 注入上下文
+```d2
+# 朴素 memory 系统的写入 / 召回两条路径
+direction: right
+
+classes: {
+  lane: {style: {fill: "#fafafa"; stroke: "#dddddd"; border-radius: 8; font-size: 18}}
+  input: {style: {fill: "#ffffff"; stroke: "#888888"; border-radius: 16}}
+  decide: {style: {fill: "#eaf2fc"; stroke: "#4a90e2"; border-radius: 6}}
+  act: {style: {fill: "#ffffff"; stroke: "#444444"; border-radius: 6}}
+  flow: {style: {stroke: "#666666"}}
+}
+
+write: 写入 {
+  class: lane
+  grid-columns: 1
+  vertical-gap: 40
+  msg: 用户说了一句话 {class: input}
+  worth: 值得记吗？ {class: decide}
+  meta: 类型 / tag / 优先级？ {class: decide}
+  gen: 生成记忆内容 {class: act}
+  store: 存储 {class: act; shape: cylinder}
+  msg -> worth: {class: flow}
+  worth -> meta: {class: flow}
+  meta -> gen: {class: flow}
+  gen -> store: {class: flow}
+}
+
+recall: 召回 {
+  class: lane
+  grid-columns: 1
+  vertical-gap: 40
+  msg: 用户说了一句话 {class: input}
+  need: 需要翻旧账吗？ {class: decide}
+  kind: 哪类记忆？ {class: decide}
+  which: 哪几条最相关？ {class: decide}
+  inject: 注入上下文 {class: act}
+  msg -> need: {class: flow}
+  need -> kind: {class: flow}
+  kind -> which: {class: flow}
+  which -> inject: {class: flow}
+}
+
+legend: |md
+  蓝色：每轮都要做的判断，输出都可枚举
+| {near: bottom-center; style.font-size: 14}
 ```
 
 路径上的判断每轮都要做，而且要赶在回复之前做完。召回挡在回复前面，它花多久，用户就多等多久。这些判断的输出也都能列举：“要不要”是 0 到 1 的概率，类型是 5 选 1，优先级是低、中、高，相关性是给每条候选打个分，没有一处需要自由生成文本。
@@ -87,11 +129,28 @@ resp = await client.system_one(turn.state(), questions)  # 15 道题，一次请
 
 ### 召回：判断、过滤、打分
 
-```
-Jev 调用 1：要不要召回（Noul）+ 每种类型、每个 tag 各一道 Noul
-代码：     按“类型命中或 tag 命中”过滤候选
-Jev 调用 2：每条候选一道 Noul ——“这条记忆对回答当前消息有用吗？”
-代码：     取概率 ≥ 0.5 的 Top-5
+```d2
+# 召回：两次 Jev 调用夹一步代码过滤
+classes: {
+  jev: {style: {fill: "#eaf2fc"; stroke: "#4a90e2"; border-radius: 6}}
+  code: {style: {fill: "#f5f5f5"; stroke: "#888888"; border-radius: 6; font-size: 14}}
+  flow: {style.stroke: "#666666"}
+}
+
+recall: 召回 {
+  grid-columns: 1
+  vertical-gap: 40
+  style: {fill: "#fafafa"; stroke: "#dddddd"; border-radius: 8; font-size: 18}
+
+  call1: "Jev 调用 1\n要不要召回（Noul）+ 每种类型、每个 tag 各一道 Noul" {class: jev}
+  filter: "代码\n按“类型命中或 tag 命中”过滤候选" {class: code}
+  call2: "Jev 调用 2\n每条候选一道 Noul：“这条记忆对回答当前消息有用吗？”" {class: jev}
+  topk: "代码\n取概率 ≥ 0.5 的 Top-5" {class: code}
+
+  call1 -> filter: {class: flow}
+  filter -> call2: {class: flow}
+  call2 -> topk: {class: flow}
+}
 ```
 
 第二步用的是 N 道 Noul，没有用一道 N 选 1 的 Choice。Choice 问的是“哪个最好”，总会挑出一个；Noul 问的是“这条有没有用”，可以对所有候选都说没用。召回要的是后一种。
@@ -254,16 +313,33 @@ System One 模型一次前向就给出每个选项校准过的概率，题目之
 
 把这种分工推广开，就是这样一个模式：
 
-```
-            ┌──────────── LLM（慢、贵、会想）────────────┐
-用户输入 ──►│ 展开状态：改写指代、补全上下文、列出候选、写评分标准 │
-            └────────────────────┬─────────────────────┘
-                                 ▼  可枚举的状态空间
-            ┌──────── System One（快、便宜、会判）───────┐
-            │ 对每个候选打校准过的分：Noul / Choice / Score │
-            └────────────────────┬─────────────────────┘
-                                 ▼  概率 + 置信度
-                          代码：阈值、排序、路由
+```d2
+# LLM 展开状态空间，System One 在上面打分
+
+classes: {
+  stage: {style: {border-radius: 8; font-size: 18}}
+  flow: {style: {stroke: "#666666"; font-size: 14}}
+}
+
+input: 用户输入 {style: {fill: "#ffffff"; stroke: "#888888"; border-radius: 16}}
+
+llm: LLM（慢、贵、会想） {
+  class: stage
+  style: {fill: "#fdf6ec"; stroke: "#d89a3d"}
+  task: 展开状态：改写指代、补全上下文、列出候选、写评分标准 {style: {fill: "#ffffff"; stroke: "#d89a3d"; border-radius: 6}}
+}
+
+s1: System One（快、便宜、会判） {
+  class: stage
+  style: {fill: "#eaf2fc"; stroke: "#4a90e2"}
+  task: 对每个候选打校准过的分：Noul / Choice / Score {style: {fill: "#ffffff"; stroke: "#4a90e2"; border-radius: 6}}
+}
+
+code: 代码：阈值、排序、路由 {style: {fill: "#f5f5f5"; stroke: "#888888"; border-radius: 6}}
+
+input -> llm: {class: flow}
+llm -> s1: 可枚举的状态空间 {class: flow}
+s1 -> code: 概率 + 置信度 {class: flow}
 ```
 
 能套用这个模式的地方不少：
@@ -281,23 +357,41 @@ System One 模型一次前向就给出每个选项校准过的概率，题目之
 
 这意味着 chatbot 在每轮回复之前，可以用一次约 0.4s 的调用，给当前消息做一次全身检查：
 
-```
-            用户消息
-               │
-               ▼
-   ┌──────── System One：一次请求，几十道题并行 ─────────┐
-   │ 需要召回记忆吗？哪类？            （本项目已验证）     │
-   │ 这句话需要写入记忆吗？            （本项目已验证）     │
-   │ 需要调用工具吗？哪一个？参数取哪个枚举值？              │
-   │ 需要联网搜索吗？需要深度推理吗？                       │
-   │ 有越狱 / 注入 / 敏感话题风险吗？                       │
-   │ 用户情绪如何？要不要转人工？                           │
-   └───────────────────────┬─────────────────────────────┘
-                           ▼ 概率 + 置信度
-       代码路由：高置信 → 直接执行；低置信 → 交给 LLM 思考
-                           │
-                           ▼
-                  LLM 生成回复（系统 2）
+```d2
+# System One 作为 chatbot 的“反射神经”：回复前一次请求做完所有判断
+
+classes: {
+  q: {style: {fill: "#ffffff"; stroke: "#4a90e2"; border-radius: 6; font-size: 14}}
+  verified: {style: {fill: "#ffffff"; stroke: "#4a90e2"; stroke-width: 3; border-radius: 6; font-size: 14}}
+  flow: {style: {stroke: "#666666"; font-size: 14}}
+}
+
+msg: 用户消息 {style: {fill: "#ffffff"; stroke: "#888888"; border-radius: 16}}
+
+s1: System One：一次请求，几十道题并行 {
+  grid-columns: 2
+  grid-gap: 16
+  style: {fill: "#eaf2fc"; stroke: "#4a90e2"; border-radius: 8; font-size: 18}
+
+  recall: 需要召回记忆吗？哪类？\n（本项目已验证） {class: verified}
+  write: 这句话需要写入记忆吗？\n（本项目已验证） {class: verified}
+  tool: 需要调用工具吗？哪一个？\n参数取哪个枚举值？ {class: q}
+  search: 需要联网搜索吗？\n需要深度推理吗？ {class: q}
+  risk: 有越狱 / 注入 / 敏感话题风险吗？ {class: q}
+  mood: 用户情绪如何？要不要转人工？ {class: q}
+}
+
+route: 代码路由 {style: {fill: "#f5f5f5"; stroke: "#888888"; border-radius: 6}}
+direct: 直接执行 {style: {fill: "#ffffff"; stroke: "#444444"; border-radius: 6}}
+think: 交给 LLM 思考 {style: {fill: "#fdf6ec"; stroke: "#d89a3d"; border-radius: 6}}
+reply: LLM 生成回复（系统 2） {style: {fill: "#fdf6ec"; stroke: "#d89a3d"; border-radius: 6}}
+
+msg -> s1: {class: flow}
+s1 -> route: 概率 + 置信度 {class: flow}
+route -> direct: 高置信 {class: flow}
+route -> think: 低置信 {class: flow}
+direct -> reply: {class: flow}
+think -> reply: {class: flow}
 ```
 
 我说的“外挂的快速工具体系”就是这一层。它自己不生成任何内容，但决定这一轮带上哪些记忆和工具、交给哪个模型、要不要开 thinking，以及哪些风险要提前拦下。

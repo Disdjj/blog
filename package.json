@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "d2": "node scripts/render-d2.mjs",
+    "build": "node scripts/render-d2.mjs && hugo --minify"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",

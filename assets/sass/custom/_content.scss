@@ -237,3 +237,20 @@ button.copy-button {
   .ne { color: #fb4934; }
   .no { color: #d3869b; }
 }
+
+// D2 示意图（render-codeblock-d2.html）按浅色主题渲染。站点暗色是 html 上的 class，
+// <img> 里的 SVG 感知不到，只能整体反相；hue-rotate 把强调色转回原来的色相
+.darkmode .content .d2-diagram img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+// 宽图溢出正文列居中显示，两侧留出左侧目录与页边距；窄屏仍按正文宽度缩放
+@media (min-width: 1000px) {
+  .content .d2-diagram.is-wide {
+    position: relative;
+    left: 50%;
+    width: min(100vw - 8rem, 72rem);
+    max-width: none;
+    transform: translateX(-50%);
+  }
+}

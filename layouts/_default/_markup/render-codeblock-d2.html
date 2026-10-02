@@ -1,0 +1,36 @@
+{{- /*
+  D2 代码块渲染钩子
+
+  Hugo 构建时不能调用 d2，图由 scripts/render-d2.mjs 预先渲染到 assets/d2/<md5>.svg，
+  这里用同样的规则（去掉首尾空白后取 md5）找到它。
+  从 SVG 的 viewBox 读出宽高写进 width/height，避免加载时版面跳动；
+  比正文列宽很多的图加 is-wide，允许溢出正文列显示，免得字被缩得太小。
+  输出时再按 SVG 内容 fingerprint：只改渲染参数（如 --sketch）时源码哈希不变，
+  靠它让浏览器和 CDN 拿到新图。
+  找不到对应 SVG 时退回显示源码，并在构建日志里提示去跑脚本。
+*/ -}}
+{{- $hash := .Inner | strings.TrimSpace | md5 -}}
+{{- $alt := or .Attributes.title "示意图" -}}
+{{- with resources.Get (printf "d2/%s.svg" $hash) | fingerprint -}}
+  {{- $width := "" -}}
+  {{- $height := "" -}}
+  {{- with findRESubmatch `viewBox="[-\d.]+ [-\d.]+ ([\d.]+) ([\d.]+)"` .Content 1 -}}
+    {{- $width = index . 0 1 -}}
+    {{- $height = index . 0 2 -}}
+  {{- end -}}
+<figure class="d2-diagram{{ if gt (float (or $width 0)) 900 }} is-wide{{ end }}">
+  <img
+    src="{{ .RelPermalink }}"
+    alt="{{ $alt }}"
+    loading="lazy"
+    decoding="async"
+    {{- with $width }} width="{{ . }}"{{ end }}
+    {{- with $height }} height="{{ . }}"{{ end }}>
+  {{- with $.Attributes.title }}
+  <figcaption>{{ . }}</figcaption>
+  {{- end }}
+</figure>
+{{- else -}}
+  {{- warnf "%s: d2 图 %s 尚未生成，请运行 node scripts/render-d2.mjs" $.Page.File.Path $hash -}}
+<pre class="d2-missing"><code>{{ .Inner }}</code></pre>
+{{- end -}}
