@@ -11,7 +11,8 @@
 */ -}}
 {{- $hash := .Inner | strings.TrimSpace | md5 -}}
 {{- $alt := or .Attributes.title "示意图" -}}
-{{- with resources.Get (printf "d2/%s.svg" $hash) | fingerprint -}}
+{{- with resources.Get (printf "d2/%s.svg" $hash) -}}
+  {{- $image := . | fingerprint -}}
   {{- $width := "" -}}
   {{- $height := "" -}}
   {{- with findRESubmatch `viewBox="[-\d.]+ [-\d.]+ ([\d.]+) ([\d.]+)"` .Content 1 -}}
@@ -20,7 +21,7 @@
   {{- end -}}
 <figure class="d2-diagram{{ if gt (float (or $width 0)) 900 }} is-wide{{ end }}">
   <img
-    src="{{ .RelPermalink }}"
+    src="{{ $image.RelPermalink }}"
     alt="{{ $alt }}"
     loading="lazy"
     decoding="async"
