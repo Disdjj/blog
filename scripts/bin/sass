@@ -1,0 +1,3 @@
+#!/bin/sh
+# npm ci 可能让 .bin/sass 指向纯 JS 版本；Hugo 必须使用 embedded 编译器。
+exec node "$(dirname "$0")/../../node_modules/sass-embedded/dist/bin/sass.js" "$@"

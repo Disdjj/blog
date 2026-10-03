@@ -25,6 +25,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { D2 } from '@d2lang/d2';
+import { extractD2Blocks } from './extract-d2.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const CONTENT_DIR = join(ROOT, 'content');
@@ -46,35 +47,6 @@ function walk(dir) {
     if (entry.isDirectory()) return walk(path);
     return entry.name.endsWith('.md') ? [path] : [];
   });
-}
-
-// 与 CommonMark 围栏规则一致：``` 或 ~~~ 开头，结束围栏同字符且不短于开始围栏
-function extractD2Blocks(markdown) {
-  const blocks = [];
-  const lines = markdown.split(/\r?\n/);
-  let fence = null;
-  let isD2 = false;
-  let buffer = [];
-
-  for (const line of lines) {
-    if (!fence) {
-      const open = line.match(/^ {0,3}(`{3,}|~{3,})\s*([^\s{`]*)/);
-      if (open) {
-        fence = open[1];
-        isD2 = open[2].toLowerCase() === 'd2';
-        buffer = [];
-      }
-      continue;
-    }
-    const close = line.match(/^ {0,3}(`{3,}|~{3,})\s*$/);
-    if (close && close[1][0] === fence[0] && close[1].length >= fence.length) {
-      if (isD2) blocks.push(buffer.join('\n'));
-      fence = null;
-      continue;
-    }
-    buffer.push(line);
-  }
-  return blocks;
 }
 
 const hashOf = (source) => createHash('md5').update(source.trim()).digest('hex');
