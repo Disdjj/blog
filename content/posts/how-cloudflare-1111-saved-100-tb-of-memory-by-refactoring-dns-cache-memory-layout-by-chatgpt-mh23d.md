@@ -5,7 +5,7 @@ slug: >-
 url: >-
   /post/how-cloudflare-1111-saved-100-tb-of-memory-by-refactoring-dns-cache-memory-layout-by-chatgpt-mh23d.html
 date: '2026-10-05 12:49:25+08:00'
-lastmod: '2026-10-05 12:52:37+08:00'
+lastmod: '2026-10-05 13:10:22+08:00'
 toc: true
 isCJKLanguage: true
 ---
@@ -13,8 +13,6 @@ isCJKLanguage: true
 
 
 # Cloudflare 1.1.1.1 如何通过重构 DNS Cache 内存布局节省 100 TB 内存 by ChatGPT
-
-# Cloudflare 1.1.1.1 如何通过重构 DNS Cache 内存布局节省 100 TB 内存
 
 > 从 ​`Vec<Record>`、Rust enum、heap allocation，一路优化到连续 DNS wire-format buffer：这是一个非常典型的“大规模系统中，数据表示本身就是性能”的案例。
 
@@ -87,57 +85,57 @@ Big Pineapple 是完整的 recursive DNS resolver。
 ```d2
 direction: right
 
-client: "DNS Client\nBrowser / OS / Router"
+client: "DNS 客户端\n浏览器 / 操作系统 / 路由器"
 
 bp: "Big Pineapple" {
-  server: "Server Module\nUDP / TCP / DoH / DoT"
+  server: "Server 模块\nUDP / TCP / DoH / DoT"
 
-  worker: "Worker\nQuery processing"
+  worker: "Worker\n查询处理"
 
-  cache: "Local DNS Cache\nARC replacement policy" {
+  cache: "本地 DNS Cache\nARC 淘汰策略" {
     shape: cylinder
   }
 
-  recursor: "Recursive Resolver\nDNS resolution logic"
+  recursor: "递归解析器\nDNS 解析逻辑"
 
-  conductor: "I/O Conductor\nUpstream selection\nRetry / QoS / RTT"
+  conductor: "I/O 调度器\n上游选择\n重试 / QoS / RTT"
 
-  sandbox: "Wasm Sandbox\nOptional DNS extensions"
+  sandbox: "Wasm 沙箱\n可选 DNS 扩展"
 }
 
-peer: "Peer Big Pineapple Nodes\nsame datacenter"
+peer: "对等 Big Pineapple 节点\n同一数据中心"
 
-auth: "Authoritative DNS\nRoot / TLD / Zone"
+auth: "权威 DNS\nRoot / TLD / Zone"
 
-client -> bp.server: "DNS Query"
+client -> bp.server: "DNS 查询"
 
-bp.server -> bp.worker: "normalized request"
+bp.server -> bp.worker: "规范化后的请求"
 
 bp.worker -> bp.cache: "lookup(CacheKey)"
 
-bp.cache -> bp.worker: "CACHE HIT\ncached records"
+bp.cache -> bp.worker: "CACHE HIT\n缓存记录"
 
-bp.cache -> peer: "local miss\nconsistent-hash / peer lookup"
+bp.cache -> peer: "本地未命中\n一致性哈希 / 对等节点查询"
 
-peer -> bp.worker: "peer cache result"
+peer -> bp.worker: "对等节点缓存结果"
 
 bp.worker -> bp.recursor: "CACHE MISS"
 
-bp.recursor -> bp.conductor: "recursive subquery"
+bp.recursor -> bp.conductor: "递归子查询"
 
-bp.conductor -> auth: "upstream DNS query"
+bp.conductor -> auth: "上游 DNS 查询"
 
-auth -> bp.conductor: "DNS response"
+auth -> bp.conductor: "DNS 响应"
 
-bp.conductor -> bp.recursor: "resolved records"
+bp.conductor -> bp.recursor: "解析得到的记录"
 
-bp.recursor -> bp.cache: "insert result"
+bp.recursor -> bp.cache: "写入结果"
 
-bp.worker -> bp.sandbox: "optional policy / plugin"
+bp.worker -> bp.sandbox: "可选策略 / 插件"
 
-bp.worker -> bp.server: "DNS response"
+bp.worker -> bp.server: "DNS 响应"
 
-bp.server -> client: "wire-format DNS packet"
+bp.server -> client: "wire-format DNS 报文"
 ```
 
 Big Pineapple 的缓存使用 ARC 一类 cache replacement 结构，而不是简单 KV；同一数据中心中的节点还会通过 consistent hashing 协同，提高整体 cache hit ratio。
@@ -248,32 +246,32 @@ entry: "CacheEntry" {
   additional_vec: "Vec<Record>\nptr + len + capacity"
 }
 
-answers: "Heap allocation #1" {
+answers: "堆分配 #1" {
   a1: "Record"
   a2: "Record"
   a3: "Record"
 }
 
-authority: "Heap allocation #2" {
+authority: "堆分配 #2" {
   au1: "Record"
   au2: "Record"
 }
 
-additional: "Heap allocation #3" {
+additional: "堆分配 #3" {
   ad1: "Record"
 }
 
-record_data_1: "Heap allocation\nRecordData / Name / String"
-record_data_2: "Heap allocation\nRecordData / Name / String"
-record_data_3: "Heap allocation\nRecordData / Name / String"
+record_data_1: "堆分配\nRecordData / Name / String"
+record_data_2: "堆分配\nRecordData / Name / String"
+record_data_3: "堆分配\nRecordData / Name / String"
 
-entry.answer_vec -> answers: "pointer"
-entry.authority_vec -> authority: "pointer"
-entry.additional_vec -> additional: "pointer"
+entry.answer_vec -> answers: "指针"
+entry.authority_vec -> authority: "指针"
+entry.additional_vec -> additional: "指针"
 
-answers.a1 -> record_data_1: "possible pointer"
-answers.a2 -> record_data_2: "possible pointer"
-answers.a3 -> record_data_3: "possible pointer"
+answers.a1 -> record_data_1: "可能的指针"
+answers.a2 -> record_data_2: "可能的指针"
+answers.a3 -> record_data_3: "可能的指针"
 ```
 
 这里会同时出现四种浪费：
@@ -345,32 +343,32 @@ Box<[Record]>
 ```d2
 direction: right
 
-before: "Before: Vec<Record>" {
-  meta: "Stack / struct metadata" {
+before: "之前：Vec<Record>" {
+  meta: "栈 / 结构体元数据" {
     ptr: "ptr\n8 bytes"
     len: "len\n8 bytes"
     cap: "capacity\n8 bytes"
   }
 
-  heap: "Heap allocation" {
+  heap: "堆分配" {
     r1: "Record 1"
     r2: "Record 2"
     r3: "Record 3"
-    unused: "Reserved capacity\nunused memory"
+    unused: "预留容量\n未使用的内存"
   }
 
   meta.ptr -> heap.r1
 }
 
-arrow: "freeze after construction"
+arrow: "构建完成后冻结"
 
-after: "After: Box<[Record]>" {
-  metadata: "Slice metadata" {
+after: "之后：Box<[Record]>" {
+  metadata: "切片元数据" {
     ptr2: "ptr"
     len2: "len"
   }
 
-  heap2: "Exact-size heap allocation" {
+  heap2: "精确大小的堆分配" {
     rr1: "Record 1"
     rr2: "Record 2"
     rr3: "Record 3"
@@ -493,38 +491,38 @@ D2 表示如下：
 ```d2
 direction: down
 
-before: "Before" {
+before: "之前" {
   direction: right
 
   answer: "answers\nBox<[Record]>\nptr + len"
   authority: "authority\nBox<[Record]>\nptr + len"
   additional: "additional\nBox<[Record]>\nptr + len"
 
-  heap1: "Heap #1\nA A A"
-  heap2: "Heap #2\nNS SOA"
-  heap3: "Heap #3\nA AAAA"
+  heap1: "堆 #1\nA A A"
+  heap2: "堆 #2\nNS SOA"
+  heap3: "堆 #3\nA AAAA"
 
   answer -> heap1
   authority -> heap2
   additional -> heap3
 }
 
-transform: "Flatten sections"
+transform: "展平各个 section"
 
-after: "After" {
+after: "之后" {
   records: "records\nBox<[Record]>\nptr + len"
 
-  offsets: "Section Metadata" {
+  offsets: "Section 元数据" {
     authority_offset: "authority offset\nu16"
     additional_offset: "additional offset\nu16"
   }
 
-  heap: "ONE contiguous allocation\n\nA | A | A | NS | SOA | A | AAAA"
+  heap: "一整块连续分配\n\nA | A | A | NS | SOA | A | AAAA"
 
   records -> heap
 
-  offsets.authority_offset -> heap: "start of Authority"
-  offsets.additional_offset -> heap: "start of Additional"
+  offsets.authority_offset -> heap: "Authority 起点"
+  offsets.additional_offset -> heap: "Additional 起点"
 }
 
 before -> transform -> after
@@ -673,7 +671,7 @@ key: "CacheKey" {
   qname: "qname\nexample.com"
 }
 
-records: "Cached Records" {
+records: "缓存的 Record" {
   r1: "A Record\nowner = None\n198.51.100.1"
   r2: "A Record\nowner = None\n198.51.100.2"
 
@@ -682,22 +680,22 @@ records: "Cached Records" {
   target: "A Record\nowner = Some(...)\n198.51.100.3"
 }
 
-heap: "Heap" {
+heap: "堆" {
   cname_owner: "cdn.example.com"
 }
 
-lookup: "Response Builder"
+lookup: "响应构建器"
 
-key.qname -> lookup: "default owner"
+key.qname -> lookup: "默认 owner"
 
 records.r1 -> lookup
 records.r2 -> lookup
 records.cname -> lookup
 records.target -> lookup
 
-records.target -> heap.cname_owner: "only allocate\nwhen owner differs"
+records.target -> heap.cname_owner: "仅在 owner 不同时分配"
 
-lookup -> result: "Reconstructed DNS Response"
+lookup -> result: "重建的 DNS 响应"
 ```
 
 这是一种很漂亮的：
@@ -828,28 +826,28 @@ NAPTR ≈ 136 bytes
 ```d2
 direction: down
 
-enum: "RecordData enum\n144 bytes per value"
+enum: "RecordData enum\n每个值 144 bytes"
 
 variants: {
   direction: right
 
-  a: "A\nuseful: 4 B\nunused: ~120+ B"
+  a: "A\n有用：4 B\n未用：约 120+ B"
 
-  aaaa: "AAAA\nuseful: 16 B\nunused: ~120 B"
+  aaaa: "AAAA\n有用：16 B\n未用：约 120 B"
 
-  txt: "TXT\nvariable"
+  txt: "TXT\n大小可变"
 
-  naptr: "NAPTR\n~136 B\nlargest variant"
+  naptr: "NAPTR\n约 136 B\n最大的 variant"
 }
 
 enum -> variants
 
-traffic: "Traffic distribution\nA + AAAA > 80%"
+traffic: "流量分布\nA + AAAA > 80%"
 
 traffic -> variants.a
 traffic -> variants.aaaa
 
-problem: "The rare largest variant\ndetermines the size\nof every common variant"
+problem: "稀有的大 variant\n决定了每个常见 variant 的大小"
 
 variants.naptr -> problem
 problem -> enum
@@ -1206,35 +1204,35 @@ Box<[u8]>
 ```d2
 direction: right
 
-v0: "V0\nObject Graph" {
-  label: "Vec<Record>\n+ large enum\n+ owner Name\n+ many allocations"
+v0: "V0\n对象图" {
+  label: "Vec<Record>\n+ 大 enum\n+ owner Name\n+ 多次分配"
 }
 
-v1: "V1\nImmutable Containers" {
-  label: "Box<[T]>\nBox<str>\nremove capacity"
+v1: "V1\n不可变容器" {
+  label: "Box<[T]>\nBox<str>\n去掉 capacity"
 }
 
-v2: "V2\nFlatten Sections" {
-  label: "Answer + Authority + Additional\n→ one record list\n+ section offsets"
+v2: "V2\n展平 Section" {
+  label: "Answer + Authority + Additional\n→ 一个 record 列表\n+ section 偏移"
 }
 
-v3: "V3\nContext Compression" {
-  label: "owner == qname\n→ owner omitted"
+v3: "V3\n上下文压缩" {
+  label: "owner == qname\n→ 省略 owner"
 }
 
-v4: "V4\nBox Large Variants" {
-  label: "small/common inline\nlarge/rare on heap"
+v4: "V4\nBox 大 Variant" {
+  label: "小的 / 常见的内联\n大的 / 稀有的放到堆上"
 }
 
-v5: "V5\nByte-oriented Cache" {
-  label: "one Box<[u8]>\nlength-prefixed wire records\ncontiguous allocation"
+v5: "V5\n面向字节的 Cache" {
+  label: "一个 Box<[u8]>\n带长度前缀的 wire record\n连续分配"
 }
 
-v0 -> v1: "remove unused mutability"
-v1 -> v2: "remove lists / pointers"
-v2 -> v3: "remove repeated information"
-v3 -> v4: "remove enum max-variant tax"
-v4 -> v5: "remove object graph itself"
+v0 -> v1: "去掉不需要的可变性"
+v1 -> v2: "去掉列表 / 指针"
+v2 -> v3: "去掉重复信息"
+v3 -> v4: "去掉 enum 最大 variant 税"
+v4 -> v5: "去掉对象图本身"
 ```
 
 这实际上是整个优化最核心的一步。
@@ -1264,37 +1262,37 @@ struct CacheEntry {
 ```d2
 direction: down
 
-upstream: "Upstream DNS Response"
+upstream: "上游 DNS 响应"
 
-parse: "DNS Parser" {
-  validate: "Validate DNS message"
-  decode: "Decode required record metadata"
+parse: "DNS 解析器" {
+  validate: "校验 DNS 报文"
+  decode: "解码所需的 record 元数据"
 }
 
-normalize: "Cache Normalization" {
-  owner: "Owner Elision\nowner == qname → implicit"
+normalize: "Cache 规范化" {
+  owner: "Owner 省略\nowner == qname → 隐式"
 
-  flags: "Pack boolean flags"
+  flags: "打包布尔标志位"
 
-  sections: "Track\nAnswer / Authority /\nAdditional boundaries"
+  sections: "记录\nAnswer / Authority /\nAdditional 边界"
 }
 
-scratch: "Reusable Scratch Buffer\nVec<u8>" {
-  note: "kept between insertions\ncapacity reused"
+scratch: "可复用的暂存缓冲区\nVec<u8>" {
+  note: "在多次插入之间保留\n容量可被复用"
 }
 
-serialize: "Serialize Records" {
-  layout: "for each Record:\n[u16 length][wire-format bytes]"
+serialize: "序列化 Record" {
+  layout: "对每个 Record：\n[u16 长度][wire-format bytes]"
 }
 
-allocate: "ONE exact-size allocation\nBox<[u8]>"
+allocate: "一次精确大小的分配\nBox<[u8]>"
 
-entry: "Final CacheEntry" {
-  meta: "TTL / timestamp /\nhit metadata / flags"
+entry: "最终 CacheEntry" {
+  meta: "TTL / 时间戳 /\n命中元数据 / 标志位"
 
-  section_meta: "section boundaries"
+  section_meta: "section 边界"
 
-  data: "contiguous record bytes"
+  data: "连续的 record 字节"
 }
 
 arc: "ARC Cache"
@@ -1308,14 +1306,14 @@ normalize.flags -> normalize.sections
 
 normalize.sections -> scratch
 
-scratch -> serialize: "append encoded record"
+scratch -> serialize: "追加编码后的 record"
 
-serialize -> allocate: "allocate exact length\n+ memcpy"
+serialize -> allocate: "分配精确长度\n+ memcpy"
 
 allocate -> entry.data
 normalize.sections -> entry.section_meta
 
-entry -> arc: "immutable insert"
+entry -> arc: "不可变写入"
 ```
 
 这里有一个容易忽略、但非常漂亮的优化：
@@ -1470,46 +1468,46 @@ SOA
 ```d2
 direction: down
 
-query: "DNS Query"
+query: "DNS 查询"
 
-key: "Build CacheKey\nqname + qtype + flags/tag"
+key: "构建 CacheKey\nqname + qtype + flags/tag"
 
-lookup: "ARC Cache Lookup"
+lookup: "ARC Cache 查找"
 
 entry: "CacheEntry" {
-  meta: "TTL / metadata"
-  bytes: "Box<[u8]>\n[length][record][length][record]..."
+  meta: "TTL / 元数据"
+  bytes: "Box<[u8]>\n[长度][record][长度][record]..."
 }
 
-iterate: "Sequential Record Iterator"
+iterate: "顺序 Record 迭代器"
 
-decision: "Record requires\nname rewriting/compression?"
+decision: "Record 是否需要\n重写名字 / 压缩？"
 
-fast: "Fast Path" {
-  copy: "Direct memcpy\ncached record bytes"
+fast: "快速路径" {
+  copy: "直接 memcpy\n缓存的 record 字节"
 }
 
-slow: "Name-aware Path" {
-  parse: "Parse relevant fields"
-  restore: "Restore implicit owner\nfrom CacheKey if needed"
-  compress: "Apply DNS name compression"
-  serialize: "Serialize into output packet"
+slow: "名字感知路径" {
+  parse: "解析相关字段"
+  restore: "按需从 CacheKey 恢复\n隐式的 owner"
+  compress: "应用 DNS 名字压缩"
+  serialize: "序列化进输出报文"
 }
 
-output: "Final DNS Wire Message"
+output: "最终 DNS Wire 报文"
 
 query -> key
 key -> lookup
 
-lookup -> entry: "hit"
+lookup -> entry: "命中"
 
 entry.bytes -> iterate
 
 iterate -> decision
 
-decision -> fast.copy: "No\nA / AAAA / TXT /\nDNSSEC etc."
+decision -> fast.copy: "否\nA / AAAA / TXT /\nDNSSEC 等"
 
-decision -> slow.parse: "Yes\nCNAME / NS /\nMX / SOA etc."
+decision -> slow.parse: "是\nCNAME / NS /\nMX / SOA 等"
 
 key -> slow.restore
 
@@ -1680,49 +1678,49 @@ Cloudflare 最终的 lookup latency：
 ```d2
 direction: down
 
-stage0: "Stage 0 — Domain Model" {
+stage0: "阶段 0 — 领域模型" {
   a: "Vec"
   b: "String"
-  c: "Record struct"
-  d: "Large enum"
+  c: "Record 结构体"
+  d: "大 enum"
   e: "Owner Name"
 }
 
-stage1: "Stage 1 — Remove Mutability" {
+stage1: "阶段 1 — 去掉可变性" {
   a: "Vec<T> → Box<[T]>"
   b: "String → Box<str>"
 }
 
-stage2: "Stage 2 — Remove Container Duplication" {
-  a: "3 record arrays → 1 array"
-  b: "pointers → small offsets"
-  c: "bools → bitflags"
+stage2: "阶段 2 — 去掉容器重复" {
+  a: "3 个 record 数组 → 1 个数组"
+  b: "指针 → 小偏移"
+  c: "bool → bitflags"
 }
 
-stage3: "Stage 3 — Remove Semantic Duplication" {
+stage3: "阶段 3 — 去掉语义重复" {
   a: "record.owner == qname"
-  b: "→ implicit owner"
+  b: "→ 隐式 owner"
 }
 
-stage4: "Stage 4 — Remove Type-layout Waste" {
-  a: "large enum variants → Box"
-  b: "reduce common RecordData size"
+stage4: "阶段 4 — 去掉类型布局浪费" {
+  a: "大 enum variant → Box"
+  b: "缩小常见 RecordData 的大小"
 }
 
-stage5: "Stage 5 — Remove Object Graph" {
+stage5: "阶段 5 — 去掉对象图" {
   a: "Record enum"
   b: "Box<RecordData>"
-  c: "many heap allocations"
+  c: "多次堆分配"
   d: "↓"
-  e: "one contiguous Box<[u8]>"
+  e: "一整块连续的 Box<[u8]>"
 }
 
-result: "Final Effect" {
-  mem: "much lower memory"
-  alloc: "fewer allocations"
-  locality: "better locality"
-  insert: "faster insertion"
-  lookup: "faster lookup"
+result: "最终效果" {
+  mem: "内存大幅降低"
+  alloc: "更少的分配"
+  locality: "更好的局部性"
+  insert: "更快的插入"
+  lookup: "更快的查找"
 }
 
 stage0 -> stage1
@@ -2291,36 +2289,36 @@ Network Wire Representation
 ```d2
 direction: right
 
-network_in: "DNS Wire\nIncoming"
+network_in: "DNS Wire\n入站"
 
-parser: "Parser"
+parser: "解析器"
 
-runtime: "Rich Runtime Model" {
-  records: "Record structs"
-  names: "Name objects"
+runtime: "丰富的运行时模型" {
+  records: "Record 结构体"
+  names: "Name 对象"
   enum: "RecordData enum"
 }
 
-normalizer: "Cache Normalizer" {
-  immutable: "Freeze collections"
-  flatten: "Flatten sections"
-  owner: "Elide repeated owner"
-  flags: "Pack metadata"
-  encode: "Encode record bytes"
+normalizer: "Cache 规范化器" {
+  immutable: "冻结集合"
+  flatten: "展平 section"
+  owner: "省略重复的 owner"
+  flags: "打包元数据"
+  encode: "编码 record 字节"
 }
 
 cache_ir: "Cache IR" {
-  metadata: "compact metadata"
-  sections: "section boundaries"
-  bytes: "contiguous record bytes"
+  metadata: "紧凑的元数据"
+  sections: "section 边界"
+  bytes: "连续的 record 字节"
 }
 
-builder: "Response Builder" {
-  fast: "direct-copy fast path"
-  names: "name-aware slow path"
+builder: "响应构建器" {
+  fast: "直接拷贝的快速路径"
+  names: "名字感知的慢速路径"
 }
 
-network_out: "DNS Wire\nOutgoing"
+network_out: "DNS Wire\n出站"
 
 network_in -> parser
 parser -> runtime
