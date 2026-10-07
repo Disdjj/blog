@@ -3,7 +3,7 @@ title: To Signal
 slug: to-signal-zmxnw
 url: /post/to-signal-zmxnw.html
 date: '2026-10-08 02:59:45+08:00'
-lastmod: '2026-10-08 03:43:00+08:00'
+lastmod: '2026-10-08 03:44:59+08:00'
 toc: true
 isCJKLanguage: true
 ---
@@ -68,7 +68,7 @@ CPU 异常让我知道需要介入。上下文大小这个线索，又帮助我�
 
 ## To Signal
 
-我很喜欢 Mitchell Hashimoto 在 [《As Code》](https://mitchellh.com/writing/as-code?utm_source=chatgpt.com) 中表达的想法：把知识从人的脑海中带入明确的系统，让它能够被共享、版本化和迭代。[Mitchell Hashimoto](https://mitchellh.com/writing/as-code)
+我很喜欢 Mitchell Hashimoto 在 [《As Code》](https://mitchellh.com/writing/as-code?utm_source=chatgpt.com) 中表达的想法：把知识从人的脑海中带入明确的系统，让它能够被共享、版本化和迭代。
 
 对我来说，To Signal 是一种相近的工程习惯。
 
@@ -88,22 +88,22 @@ CPU 异常让我知道需要介入。上下文大小这个线索，又帮助我�
 
 **信号检测理论（Signal Detection Theory）** 区分了两个问题：我们有多大能力分辨信号与噪声，以及我们把判断门槛设在哪里。对于同一套证据，调整门槛会改变命中、漏报和误报的比例；不同错误的代价，也会影响门槛的选择。这为“哪些扰动应该过滤，哪些异常值得打扰人”提供了精确的讨论语言。
 
-可以从 David Heeger 的 [《Signal Detection Theory》讲义](https://www.cns.nyu.edu/~david/handouts/sdt/sdt.html)读起。[纽约大学中国网络学院](https://www.cns.nyu.edu/~david/handouts/sdt/sdt.html)
+可以从 David Heeger 的 [《Signal Detection Theory》讲义](https://www.cns.nyu.edu/~david/handouts/sdt/sdt.html)读起
 
 ### 控制理论：通过有限观测理解系统状态
 
 **控制理论（Control Theory）** 中的可观测性与状态估计，研究如何根据系统的输入和输出推断内部状态，再利用这些估计形成反馈。它很适合用来思考：我们选择的观察入口，究竟能让我们知道什么，又有哪些状态仍然隐藏着。
 
-Åström 与 Murray 的 [《Feedback Systems》第八章：Output Feedback](https://fbswiki.org/wiki/index.php/Output_Feedback)讨论了这些问题。这些方法依赖明确的模型与假设，借用到软件协作场景时，也需要检查其适用范围。[FBS Wiki](https://fbswiki.org/wiki/index.php/Output_Feedback)
+Åström 与 Murray 的 [《Feedback Systems》第八章：Output Feedback](https://fbswiki.org/wiki/index.php/Output_Feedback)讨论了这些问题。这些方法依赖明确的模型与假设，借用到软件协作场景时，也需要检查其适用范围
 
 ### 人因工程与告警管理：为人的响应能力设计信息
 
 **人因工程（Human Factors）** 关注人的能力与限制。告警管理将这种关注落实到系统设计中：告警应该把注意力引向需要及时判断的状态，提供有用、相关的信息，并给人留下足够的响应时间。
 
-英国 HSE 的 [《Alarm Management》](https://www.hse.gov.uk/humanfactors/topics/alarm-management.htm)是一份简短的入口。它提醒我们，人的理解和响应能力，本身就是信号系统的设计条件。[健康与安全执行局](https://www.hse.gov.uk/humanfactors/topics/alarm-management.htm)
+英国 HSE 的 [《Alarm Management》](https://www.hse.gov.uk/humanfactors/topics/alarm-management.htm)是一份简短的入口。它提醒我们，人的理解和响应能力，本身就是信号系统的设计条件
 
 ### SRE：把这些问题落实到软件系统
 
 Google SRE 的 [《Monitoring Distributed Systems》](https://sre.google/sre-book/monitoring-distributed-systems/?utm_source=chatgpt.com)直接讨论了监控与告警的工程取舍：区分症状和原因，让告警对应值得采取的行动，控制噪声，并避免让人持续盯着屏幕寻找问题。
 
-对于软件工程师，这篇最适合作为实践上的第一站，尤其值得阅读其中的 *Symptoms Versus Causes* 和 *Tying These Principles Together* 两节。[sre.google](https://sre.google/sre-book/monitoring-distributed-systems/)
+对于软件工程师，这篇最适合作为实践上的第一站，尤其值得阅读其中的 *Symptoms Versus Causes* 和 *Tying These Principles Together* 两节
