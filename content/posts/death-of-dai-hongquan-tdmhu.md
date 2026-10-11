@@ -6,6 +6,7 @@ date: '2025-12-30 15:41:20+08:00'
 lastmod: '2025-12-30 16:07:56+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["散文","故乡","生活"]
 ---
 
 

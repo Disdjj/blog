@@ -6,6 +6,7 @@ date: '2026-04-10 00:50:23+08:00'
 lastmod: '2026-04-10 01:50:22+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["ClaudeCode","Agent","Harness","思考"]
 ---
 
 
