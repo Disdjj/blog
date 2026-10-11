@@ -6,6 +6,7 @@ date: '2025-11-19 15:00:43+08:00'
 lastmod: '2025-11-19 15:09:30+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Gemini","AI编程","IDE","产品分析"]
 ---
 
 

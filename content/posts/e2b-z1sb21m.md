@@ -6,6 +6,7 @@ date: '2026-04-03 00:17:48+08:00'
 lastmod: '2026-04-05 17:16:23+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Firecracker","虚拟化","Linux","安全"]
 ---
 
 

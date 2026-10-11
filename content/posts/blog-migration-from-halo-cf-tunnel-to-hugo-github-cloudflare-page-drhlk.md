@@ -7,6 +7,7 @@ date: '2025-11-25 01:03:22+08:00'
 lastmod: '2025-11-28 00:39:58+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Hugo","Cloudflare","GitHub","思源笔记"]
 ---
 
 

@@ -6,6 +6,7 @@ date: '2026-07-07 14:27:30+08:00'
 lastmod: '2026-07-07 15:05:54+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Tager","Prompt","LLM","SystemPrompt"]
 ---
 
 

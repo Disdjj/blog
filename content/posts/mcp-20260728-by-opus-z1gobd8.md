@@ -6,6 +6,7 @@ date: '2026-08-04 14:08:56+08:00'
 lastmod: '2026-08-04 15:04:58+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["MCP","Agent","工具","架构"]
 ---
 
 

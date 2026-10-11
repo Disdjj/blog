@@ -6,6 +6,7 @@ date: '2026-07-07 14:36:08+08:00'
 lastmod: '2026-07-07 15:36:18+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["Tager","AI","产品设计","思考"]
 ---
 
 

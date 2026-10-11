@@ -6,6 +6,7 @@ date: '2026-08-31 16:04:29+08:00'
 lastmod: '2026-08-31 17:18:40+08:00'
 toc: true
 isCJKLanguage: true
+tags: ["llmdoc","AI编程","上下文工程","开源"]
 ---
 
 
