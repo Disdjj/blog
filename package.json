@@ -1,7 +1,7 @@
 {
   "scripts": {
     "d2": "node scripts/render-d2.mjs",
-    "build": "node scripts/render-d2.mjs && PATH=\"$PWD/scripts/bin:$PATH\" hugo --minify",
+    "build": "node scripts/fix-frontmatter-dates.mjs && node scripts/render-d2.mjs && PATH=\"$PWD/scripts/bin:$PATH\" hugo --minify",
     "test": "node --test scripts/tests/*.test.mjs"
   },
   "devDependencies": {
