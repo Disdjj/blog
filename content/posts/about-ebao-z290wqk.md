@@ -2,8 +2,8 @@
 title: 关于E宝
 slug: about-ebao-z290wqk
 url: /post/about-ebao-z290wqk.html
-date: 2026-10-27 02:46:33--7:00
-lastmod: 2026-10-27 03:39:04--7:00
+date: '2026-10-26 11:46:33+08:00'
+lastmod: '2026-10-26 12:39:04+08:00'
 toc: true
 isCJKLanguage: true
 ---
