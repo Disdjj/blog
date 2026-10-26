@@ -12,6 +12,8 @@
  * 插件重新读取自己写的 yaml 时会把北京时间当成本机时间再换算一次，
  * 时间会越漂越晚，这种情况无法自动还原：修正后 date 若在未来，
  * Hugo 会静默跳过这篇文章，因此直接让构建失败，提示人工改正时间。
+ * 漂移后仍在过去的 date、漂移的 lastmod，以及 UTC+10~+14 下格式合法的偏移，
+ * 只看格式都识别不出来，会带着错误时间发布。
  *
  * 用法：node scripts/fix-frontmatter-dates.mjs   原地修正 content/ 下的 .md
  */
@@ -53,7 +55,15 @@ function* walkMarkdown(dir) {
   }
 }
 
-if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
+function isMainModule() {
+  try {
+    return realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
   let futurePosts = 0;
   for (const path of walkMarkdown(CONTENT_DIR)) {
     const { source, fixes } = fixFrontMatterDates(readFileSync(path, 'utf8'));
