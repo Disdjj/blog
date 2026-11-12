@@ -1,0 +1,76 @@
+/*
+ * Joplo 交互式演示嵌入容器
+ *
+ * Joplo 嵌入播放器由 16:10 舞台（高 = 宽 × 62.5%）与底部 44px 控制栏组成；
+ * 用 padding-bottom + content-box 高度精确贴合两者之和，消除舞台两侧多余黑边，
+ * 同时在宽屏下受视口高度约束，保证单屏内能完整看到舞台与底部控制栏。
+ */
+
+@use "tokens" as *;
+
+.content .joplo-embed {
+  margin: 2rem 0;
+  text-align: left;
+
+  &.is-wide {
+    @media (min-width: 1024px) {
+      position: relative;
+      left: 50%;
+      width: min(84vw, 66rem, calc((100svh - 8.5rem) * 1.6));
+      max-width: none;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.joplo-embed-frame {
+  position: relative;
+  box-sizing: content-box;
+  width: 100%;
+  height: 44px;
+  padding-bottom: 62.5%;
+  overflow: hidden;
+  background-color: #0d1016;
+  border: 1px solid var(--bg2);
+  border-radius: $radius-md;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+// 显式传入自定义 ratio 时切回标准 aspect-ratio
+.joplo-embed[style*="--joplo-ratio"] .joplo-embed-frame {
+  box-sizing: border-box;
+  height: auto;
+  padding-bottom: 0;
+  aspect-ratio: var(--joplo-ratio);
+}
+
+.darkmode .joplo-embed-frame {
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
+}
+
+.content .joplo-embed .joplo-embed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin-top: 0.65rem;
+  color: var(--fg3);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.joplo-embed-open {
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}

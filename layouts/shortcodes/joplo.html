@@ -1,0 +1,68 @@
+{{- /*
+  Joplo 交互式演示嵌入短代码
+
+  用法：
+    {{< joplo
+      src="/demos/vibe-coding-parallel/index.html"
+      title="我的 Vibe Coding 并发方案：让 Agent 管理 Agent"
+      caption="点击播放连续观看 4 章演示；暂停时可点击左侧任意 Agent 切换终端视角，按 F 全屏。"
+    >}}
+
+  可选参数：
+    src       演示入口地址（本地 /demos/.../index.html 或 Joplo 分享链接）
+    title     iframe 无障碍标题
+    caption   播放器下方的简短说明（省略时显示 title）
+    scenario  指定起始章节 ID（如 superset-parallel.master）
+    autoplay  传 "1" 时跳过封面直接播放
+    lang      内容与界面语言（默认 zh-CN）
+    ratio     画幅比例（如 "16 / 10"，省略时使用默认 16:10）
+    wide      传 "false" 时限制在正文列宽内（默认宽屏居中展开）
+*/ -}}
+{{- $rawSrc := .Get "src" -}}
+{{- if not $rawSrc -}}
+  {{- errorf "%s: joplo 短代码缺少必填参数 src" .Position -}}
+{{- end -}}
+
+{{- $title := or (.Get "title") "Joplo 交互式演示" -}}
+{{- $caption := or (.Get "caption") $title -}}
+{{- $ratio := .Get "ratio" -}}
+{{- $wide := ne (.Get "wide") "false" -}}
+{{- $lang := or (.Get "lang") "zh-CN" -}}
+{{- $scenario := .Get "scenario" -}}
+{{- $autoplay := eq (.Get "autoplay") "1" -}}
+
+{{- $embedSrc := $rawSrc -}}
+{{- if not (strings.Contains $embedSrc "embed=") -}}
+  {{- $sep := cond (strings.Contains $embedSrc "?") "&" "?" -}}
+  {{- $embedSrc = printf "%s%sembed=1" $embedSrc $sep -}}
+{{- end -}}
+{{- if and $lang (not (strings.Contains $embedSrc "lang=")) -}}
+  {{- $embedSrc = printf "%s&lang=%s" $embedSrc ($lang | urlquery) -}}
+{{- end -}}
+{{- if and $scenario (not (strings.Contains $embedSrc "scenario=")) -}}
+  {{- $embedSrc = printf "%s&scenario=%s" $embedSrc ($scenario | urlquery) -}}
+{{- end -}}
+{{- if and $autoplay (not (strings.Contains $embedSrc "autoplay=")) -}}
+  {{- $embedSrc = printf "%s&autoplay=1" $embedSrc -}}
+{{- end -}}
+
+{{- $openHref := $rawSrc -}}
+{{- if and $lang (not (strings.Contains $openHref "lang=")) -}}
+  {{- $openSep := cond (strings.Contains $openHref "?") "&" "?" -}}
+  {{- $openHref = printf "%s%slang=%s" $openHref $openSep ($lang | urlquery) -}}
+{{- end -}}
+
+<figure class="joplo-embed{{ if $wide }} is-wide{{ end }}"{{- if and $ratio (findRE `^\d+\s*/\s*\d+$` $ratio) }} style="{{ printf "--joplo-ratio: %s;" $ratio | safeCSS }}"{{ end }}>
+  <div class="joplo-embed-frame">
+    <iframe
+      src="{{ $embedSrc }}"
+      title="{{ $title }}"
+      loading="lazy"
+      allow="fullscreen; autoplay; clipboard-write"
+      allowfullscreen></iframe>
+  </div>
+  <figcaption class="joplo-embed-meta">
+    <span class="joplo-embed-caption">{{ $caption }}</span>
+    <a class="joplo-embed-open" href="{{ $openHref }}" target="_blank" rel="noopener">独立窗口打开 ↗</a>
+  </figcaption>
+</figure>
